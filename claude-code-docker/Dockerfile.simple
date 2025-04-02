@@ -1,0 +1,30 @@
+﻿# Base Image
+FROM node:20-slim
+
+# Install essential tools
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    ripgrep \
+    vim \
+    zsh \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Claude Code globally
+RUN npm install -g @anthropic-ai/claude-code
+
+# Create a non-root user
+RUN useradd -m -s /bin/zsh coder || true
+
+# Ensure proper ownership
+RUN mkdir -p /home/coder/project && \
+    chown -R coder:coder /home/coder
+
+# Set working directory
+WORKDIR /home/coder/project
+
+# Switch to non-root user
+USER coder
+
+# Default to bash
+CMD ["/bin/zsh"]

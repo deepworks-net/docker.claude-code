@@ -1,0 +1,16 @@
+﻿services:
+  # Standard node container
+  claude-code:
+    image: claude-code:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.simple
+    volumes:
+      - ./project:/home/coder/project
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    # Keep container running
+    tty: true
+    stdin_open: true
+    # Override the default command to keep container alive
+    command: tail -f /dev/null
