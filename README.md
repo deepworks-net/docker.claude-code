@@ -26,7 +26,7 @@ Since Claude Code officially requires Linux or macOS (with Windows only supporte
 
 1. Clone this repository:
    ```
-   git clone https://github.com/yourusername/docker.claude-code.git
+   git clone https://github.com/deepworks-net/docker.claude-code.git
    cd docker.claude-code
    ```
 
