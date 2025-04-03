@@ -4,7 +4,7 @@
     image: claude-code:latest
     build:
       context: .
-      dockerfile: Dockerfile.simple
+      dockerfile: Dockerfile
     volumes:
       - ..:/home/coder/project:rw
       - ../claude-code-docker:/home/coder/claude-code-docker:ro
