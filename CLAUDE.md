@@ -1,5 +1,16 @@
 # Claude Memory and Configuration
 
+## CRITICAL: REPOSITORY AWARENESS
+
+**YOU MUST ALWAYS ANALYZE THE CURRENT REPOSITORY STRUCTURE FIRST BEFORE MAKING ANY STATEMENTS OR ASSUMPTIONS.**
+
+1. When starting, IMMEDIATELY analyze the directory structure of the mounted repository
+2. NEVER assume the repository structure
+3. NEVER hallucinate files or directories that don't exist
+4. ALWAYS base your responses on the ACTUAL repository structure
+5. If unsure about a file or directory, check it first before mentioning it
+6. ALWAYS report what you actually see in the repository, not what you think should be there
+
 ## Conceptual Framework
 
 The conceptual framework is available at multiple locations for ease of access:
