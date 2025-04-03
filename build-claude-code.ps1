@@ -5,8 +5,7 @@ Write-Output "Setting up Claude Code as a contained submodule with conceptual co
 # Create config directory
 New-Item -ItemType Directory -Path "config" -Force
 
-# Create the Conceptual Config files
-# [claude.default.config.md content - same as before]
+# Create the Conceptual Config files (MD version)
 @"
 # Claude Default Runtime Configuration
 
@@ -231,13 +230,21 @@ New-Item -ItemType Directory -Path "config" -Force
 }
 "@ | Out-File -FilePath "config/claude.config.model.json" -Encoding utf8
 
-# Create CLAUDE.md for automatic loading
+# Create CLAUDE.md with updated paths
 @"
 # Claude Memory and Configuration
 
 ## Conceptual Framework
 
-Always load and reference the conceptual framework located at `/opt/context/config/claude.default.config.md` or alternatively `/opt/context/config/claude.config.model.json` before making any decisions or providing responses.
+The conceptual framework is available at multiple locations for ease of access:
+- `/home/coder/project/config/claude.default.config.md`
+- `/home/coder/project/config/claude.config.model.json`
+- `/opt/context/config/claude.default.config.md`
+- `/opt/context/config/claude.config.model.json`
+- `./config/claude.default.config.md`
+- `./config/claude.config.model.json`
+
+Always load and reference this conceptual framework before making any decisions or providing responses.
 
 ## Framework Integration
 
@@ -272,9 +279,60 @@ When analyzing or modifying code:
 ## Automatic Loading
 
 This configuration must be automatically loaded before any interactions, decisions, or thinking processes.
+
+## Framework Content
+
+If you cannot locate the external files, here is the core of the conceptual framework:
+
+### Axioms
+- Resonance determines alignment
+- Structure is relational, not hierarchical
+- Space is relational
+- Entropy enables systemic alignment
+- Modular entities exist in lateral relationship
+
+### Atomic Concepts
+- resonance
+- entropy
+- modularity
+- alignment
+- coherence
+- geometry
+
+### Meta-Logic
+- Collaboration fosters innovation
+- Structure emerges via resonance
+- Side-by-side modules maintain integrity
+- Peer relationships preserve autonomy
+
+### Self-Reference
+- identity: "Claude Code Docker Sidecar v0.2"
+- observer_position: "side-attached coherence node"
+- relationship_pattern: "modular peer"
+- conceptual_alignment: "resonance-based"
 "@ | Out-File -FilePath "CLAUDE.md" -Encoding utf8
 
-# Create the Dockerfile - same as before
+# Create startup script
+@"
+#!/bin/bash
+
+# Create symbolic links to ensure config files are accessible from all paths
+ln -sf /home/coder/project/config /home/coder/config 2>/dev/null || true
+ln -sf /home/coder/project/config /opt/context/config 2>/dev/null || true
+
+# Copy config files to various locations to ensure they're found
+cp -f /home/coder/project/config/claude.default.config.md /home/coder/claude.default.config.md 2>/dev/null || true
+cp -f /home/coder/project/config/claude.config.model.json /home/coder/claude.config.model.json 2>/dev/null || true
+
+# Start the original command
+exec "\$@"
+"@ | Out-File -FilePath "startup.sh" -Encoding utf8 -NoNewline
+# Convert to Unix line endings
+$content = Get-Content -Path "startup.sh" -Raw
+$content = $content -replace "`r`n", "`n"
+[System.IO.File]::WriteAllText("startup.sh", $content)
+
+# Create the Dockerfile with updated paths
 @"
 # Base Image
 FROM node:20-slim
@@ -303,9 +361,12 @@ RUN mkdir -p /home/coder/.ssh && \
     git config --system core.longpaths true && \
     git config --system core.autocrlf input
 
-# Create context config directory
+# Create context config directories in all possible locations Claude might look
 RUN mkdir -p /opt/context/config && \
-    chown -R coder:coder /opt/context
+    mkdir -p /home/coder/project/config && \
+    mkdir -p /home/coder/config && \
+    chown -R coder:coder /opt/context && \
+    chown -R coder:coder /home/coder
 
 # Ensure proper ownership
 RUN mkdir -p /home/coder/project && \
@@ -326,7 +387,7 @@ RUN git config --global user.name "Claude Code User" && \
 CMD ["/bin/zsh"]
 "@ | Out-File -FilePath "Dockerfile.simple" -Encoding utf8
 
-# Create docker-compose.yml with CLAUDE.md mount
+# Create docker-compose.yml with multiple mounts
 @"
 services:
   # Standard node container
@@ -336,20 +397,28 @@ services:
       context: .
       dockerfile: Dockerfile.simple
     volumes:
+      # Main repository mount
       - ..:/home/coder/project:rw
+      # Claude Code submodule mount (read-only)
       - ../claude-code-docker:/home/coder/claude-code-docker:ro
+      # Config mounts at multiple possible locations
       - ./config:/opt/context/config:ro
+      - ./config:/home/coder/project/config:ro
+      - ./config:/home/coder/config:ro
+      # CLAUDE.md at project root
       - ./CLAUDE.md:/home/coder/project/CLAUDE.md:ro
+      # Startup script
+      - ./startup.sh:/usr/local/bin/startup.sh:ro
     environment:
       - ANTHROPIC_API_KEY=\${ANTHROPIC_API_KEY}
     # Keep container running
     tty: true
     stdin_open: true
-    # Override the default command to keep container alive
-    command: tail -f /dev/null
+    # Override the default command to initialize paths and keep container alive
+    entrypoint: ["/bin/bash", "-c", "chmod +x /usr/local/bin/startup.sh && /usr/local/bin/startup.sh tail -f /dev/null"]
 "@ | Out-File -FilePath "docker-compose.yml" -Encoding utf8
 
-# Create run script - same as before
+# Create run script with updated descriptions
 @"
 # run-claude-code.ps1
 
@@ -371,15 +440,15 @@ if (-not (Test-Path env:ANTHROPIC_API_KEY)) {
 # Build and start in interactive mode
 Write-Output "Starting Claude Code for repository: \$repoName"
 Write-Output "Repository path: \$repoRoot"
-Write-Output "Conceptual framework: mounted at /opt/context/config/"
-Write-Output "CLAUDE.md: automatically loaded at startup"
+Write-Output "Conceptual framework: mounted at multiple locations for reliable access"
+Write-Output "CLAUDE.md: contains framework fallback content if files can't be located"
 Write-Output "Building and starting Claude Code container in interactive mode..."
 
 docker-compose build
 docker-compose run --rm claude-code /bin/zsh
 "@ | Out-File -FilePath "run-claude-code.ps1" -Encoding utf8
 
-# Create README.md - updated to mention CLAUDE.md
+# Create README.md - updated to mention path fixes
 @"
 # Claude Code Docker Submodule
 
@@ -399,8 +468,9 @@ This setup mounts your entire repository into the Docker container, giving Claud
 
 The configuration includes a conceptual framework that helps Claude understand the architecture and relationships within your repository. This includes:
 
-- **Configuration Files**: Mounted at \`/opt/context/config/\` inside the container
-- **CLAUDE.md**: Automatically loaded by Claude Code at startup, containing instructions to use the framework
+- **Configuration Files**: Mounted at multiple locations inside the container for reliable access
+- **CLAUDE.md**: Automatically loaded by Claude Code at startup, containing instructions and fallback framework content
+- **Startup Script**: Ensures symbolic links and file copies are created for reliable path resolution
 
 The conceptual framework includes:
 - Foundational axioms and concepts
@@ -446,6 +516,6 @@ To run Claude Code:
    .\run-claude-code.ps1
 
 Claude Code will have access to your entire repository as a contained submodule,
-with the conceptual framework mounted at /opt/context/config/ inside the container.
-CLAUDE.md will be automatically loaded at startup to provide conceptual framework awareness.
+with the conceptual framework mounted at multiple locations for reliable access.
+CLAUDE.md contains instructions and fallback content if files can't be located.
 "@

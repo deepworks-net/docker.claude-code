@@ -4,11 +4,17 @@
     image: claude-code:latest
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.simple
     volumes:
+      # Main repository mount
       - ..:/home/coder/project:rw
+      # Claude Code submodule mount (read-only)
       - ../claude-code-docker:/home/coder/claude-code-docker:ro
+      # Config mounts at multiple possible locations
       - ./config:/opt/context/config:ro
+      - ./config:/home/coder/project/config:ro
+      - ./config:/home/coder/config:ro
+      # CLAUDE.md at project root
       - ./CLAUDE.md:/home/coder/project/CLAUDE.md:ro
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}

@@ -25,9 +25,12 @@ RUN mkdir -p /home/coder/.ssh && \
     git config --system core.longpaths true && \
     git config --system core.autocrlf input
 
-# Create context config directory
+# Create context config directories in all possible locations Claude might look
 RUN mkdir -p /opt/context/config && \
-    chown -R coder:coder /opt/context
+    mkdir -p /home/coder/project/config && \
+    mkdir -p /home/coder/config && \
+    chown -R coder:coder /opt/context && \
+    chown -R coder:coder /home/coder
 
 # Ensure proper ownership
 RUN mkdir -p /home/coder/project && \
