@@ -6,7 +6,8 @@
       context: .
       dockerfile: Dockerfile.simple
     volumes:
-      - ./project:/home/coder/project
+      - ..:/home/coder/project:rw
+      - ../claude-code-docker:/home/coder/claude-code-docker:ro
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
     # Keep container running
