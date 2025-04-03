@@ -69,6 +69,11 @@ services:
       - ./project:/home/coder/project
     environment:
       - ANTHROPIC_API_KEY=\${ANTHROPIC_API_KEY}
+    # Keep container running
+    tty: true
+    stdin_open: true
+    # Override the default command to keep container alive
+    command: tail -f /dev/null
 "@ | Out-File -FilePath "docker-compose.yml" -Encoding utf8
 
 # Create run script
@@ -83,43 +88,43 @@ Write-Output "------------------------------------------------"
 
 # Check if ANTHROPIC_API_KEY is set
 if (-not (Test-Path env:ANTHROPIC_API_KEY)) {
-    $apiKey = Read-Host -Prompt "Enter your Anthropic API key (or set the ANTHROPIC_API_KEY environment variable)"
-    if ($apiKey) {
-        $env:ANTHROPIC_API_KEY = "$apiKey"
+    \$apiKey = Read-Host -Prompt "Enter your Anthropic API key (or set the ANTHROPIC_API_KEY environment variable)"
+    if (\$apiKey) {
+        \$env:ANTHROPIC_API_KEY = "\$apiKey"
     }
 }
 
 # GitHub repository handling
-$useRepo = Read-Host -Prompt "Do you want to clone a GitHub repository? (y/n)"
+\$useRepo = Read-Host -Prompt "Do you want to clone a GitHub repository? (y/n)"
 
-if ($useRepo -eq "y") {
-    $repoUrl = Read-Host -Prompt "Enter the GitHub repository URL (e.g., https://github.com/username/repo.git)"
-    $repoName = $repoUrl -replace ".*/(.*).git", '$1'
-    $projectPath = Join-Path -Path "project" -ChildPath $repoName
+if (\$useRepo -eq "y") {
+    \$repoUrl = Read-Host -Prompt "Enter the GitHub repository URL (e.g., https://github.com/username/repo.git)"
+    \$repoName = \$repoUrl -replace ".*/(.*).git", '\$1'
+    \$projectPath = Join-Path -Path "project" -ChildPath \$repoName
     
     # Check if the repository already exists
-    if (Test-Path $projectPath) {
-        $updateRepo = Read-Host -Prompt "Repository already exists. Update it? (y/n)"
-        if ($updateRepo -eq "y") {
+    if (Test-Path \$projectPath) {
+        \$updateRepo = Read-Host -Prompt "Repository already exists. Update it? (y/n)"
+        if (\$updateRepo -eq "y") {
             Write-Output "Updating existing repository..."
-            Push-Location $projectPath
+            Push-Location \$projectPath
             & git pull
             Pop-Location
         }
     } else {
         Write-Output "Cloning repository..."
-        & git clone $repoUrl $projectPath
+        & git clone \$repoUrl \$projectPath
         
         # Check for submodules
-        if (Test-Path -Path (Join-Path -Path $projectPath -ChildPath ".gitmodules")) {
+        if (Test-Path -Path (Join-Path -Path \$projectPath -ChildPath ".gitmodules")) {
             Write-Output "Initializing submodules..."
-            Push-Location $projectPath
+            Push-Location \$projectPath
             & git submodule update --init --recursive
             Pop-Location
         }
     }
     
-    Write-Output "Repository ready at: $projectPath"
+    Write-Output "Repository ready at: \$projectPath"
 } else {
     Write-Output "Using local project directory: ./project"
 }
@@ -131,4 +136,38 @@ docker-compose run --rm claude-code /bin/zsh
 
 # Note: This approach launches the container directly in interactive mode
 # rather than starting it detached and then connecting
+"@ | Out-File -FilePath "run-claude-code.ps1" -Encoding utf8
+
+# Create a README.md
+@"
+# Claude Code Docker Setup
+
+This is a simple Docker setup for running Claude Code in a container.
+
+## Getting Started
+
+1. Make sure Docker is installed and running
+2. Run the script: .\run-claude-code.ps1
+3. Inside the container, run claude to start Claude Code
+
+## Project Files
+
+Your project files will be available in the ./project directory. Any changes made inside the container will be reflected in this directory.
+
+## Environment Variables
+
+You can set the ANTHROPIC_API_KEY environment variable before running the script, or the script will prompt you for it.
+"@ | Out-File -FilePath "README.md" -Encoding utf8
+
+# Build instructions
+Write-Output @"
+
+Claude Code Docker environment is ready!
+
+To build and run:
+
+1. Run Claude Code with your project:
+   .\run-claude-code.ps1
+
+Your code will be available in the 'project' subdirectory.
 "@
