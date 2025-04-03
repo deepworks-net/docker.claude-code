@@ -8,6 +8,7 @@
     volumes:
       - ..:/home/coder/project:rw
       - ../claude-code-docker:/home/coder/claude-code-docker:ro
+      - ./config:/opt/context/config:ro
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
     # Keep container running

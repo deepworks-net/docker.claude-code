@@ -25,6 +25,10 @@ RUN mkdir -p /home/coder/.ssh && \
     git config --system core.longpaths true && \
     git config --system core.autocrlf input
 
+# Create context config directory
+RUN mkdir -p /opt/context/config && \
+    chown -R coder:coder /opt/context
+
 # Ensure proper ownership
 RUN mkdir -p /home/coder/project && \
     chown -R coder:coder /home/coder
