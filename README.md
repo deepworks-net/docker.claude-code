@@ -34,18 +34,21 @@ This implementation positions Claude Code as a self-contained submodule:
 ## Quick Start
 
 1. Add this repository as a submodule:
-   ```
+
+   ```bash
    git submodule add https://github.com/yourusername/docker.claude-code.git claude-code-docker
    git submodule update --init --recursive
    ```
 
 2. Run Claude Code:
+
    ```powershell
    cd claude-code-docker
    .\run-claude-code.ps1
    ```
 
 3. Inside the container, start Claude Code:
+
    ```bash
    claude
    ```
@@ -53,19 +56,21 @@ This implementation positions Claude Code as a self-contained submodule:
 ## How It Works
 
 This project creates a Docker container with:
+
 - Node.js environment required for Claude Code
 - All necessary dependencies pre-installed
 - Volume mounting for your entire repository
 - Complete isolation of Claude Code infrastructure
 
 When you run the container:
+
 1. Your entire repository is mounted inside the container
 2. Claude Code can analyze and work with your entire codebase
 3. All Claude Code infrastructure stays within its own directory
 
 ## Project Structure
 
-```
+```DIRECTORY
 your-repository/
 ├── .git/                          # Your repository's Git data
 ├── src/                           # Your project source code
