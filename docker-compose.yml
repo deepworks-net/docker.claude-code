@@ -4,7 +4,7 @@
     image: claude-code:latest
     build:
       context: .
-      dockerfile: Dockerfile.simple
+      dockerfile: Dockerfile
     volumes:
       # Main repository mount
       - ..:/home/coder/project:rw
@@ -16,10 +16,15 @@
       - ./config:/home/coder/config:ro
       # CLAUDE.md at project root
       - ./CLAUDE.md:/home/coder/project/CLAUDE.md:ro
+      # Startup scripts
+      - ./startup.sh:/usr/local/bin/startup.sh:ro
+      - ./analyze-repo.sh:/usr/local/bin/analyze-repo.sh:ro
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GIT_USER_NAME=${GIT_USER_NAME:-Claude Code User}
+      - GIT_USER_EMAIL=${GIT_USER_EMAIL:-user@example.com}
     # Keep container running
     tty: true
     stdin_open: true
-    # Override the default command to keep container alive
-    command: tail -f /dev/null
+    # Override the default command to initialize paths and keep container alive
+    entrypoint: ["/bin/bash", "-c", "chmod +x /usr/local/bin/startup.sh /usr/local/bin/analyze-repo.sh && /usr/local/bin/startup.sh tail -f /dev/null"]
