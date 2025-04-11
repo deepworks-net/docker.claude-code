@@ -4,7 +4,7 @@
     image: claude-code:latest
     build:
       context: .
-      dockerfile: Dockerfile.simple
+      dockerfile: Dockerfile
     volumes:
       # Main repository mount
       - ..:/home/coder/project:rw
