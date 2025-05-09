@@ -230,9 +230,24 @@ New-Item -ItemType Directory -Path "config" -Force
 }
 "@ | Out-File -FilePath "config/claude.config.model.json" -Encoding utf8
 
-# Create CLAUDE.md with updated paths
+# Create CLAUDE.md with updated paths and stronger repository awareness
 @"
 # Claude Memory and Configuration
+
+## CRITICAL: REPOSITORY AWARENESS
+
+**YOU MUST ALWAYS ANALYZE THE CURRENT REPOSITORY STRUCTURE FIRST BEFORE MAKING ANY STATEMENTS OR ASSUMPTIONS.**
+
+1. When starting, IMMEDIATELY analyze the directory structure of the mounted repository
+2. NEVER assume the repository structure
+3. NEVER hallucinate files or directories that don't exist
+4. ALWAYS base your responses on the ACTUAL repository structure
+5. If unsure about a file or directory, check it first before mentioning it
+6. ALWAYS report what you actually see in the repository, not what you think should be there
+
+## Repository Structure
+
+**READ REPO_STRUCTURE.md FIRST** - This file contains the actual repository structure analysis that was automatically generated when the container started. It provides the ground truth for the repository structure.
 
 ## Conceptual Framework
 
@@ -312,7 +327,133 @@ If you cannot locate the external files, here is the core of the conceptual fram
 - conceptual_alignment: "resonance-based"
 "@ | Out-File -FilePath "CLAUDE.md" -Encoding utf8
 
-# Create startup script
+# Create Repository Analyzer Script
+@"
+#!/bin/bash
+
+# analyze-repo.sh
+# Generates a repository structure analysis file for Claude to read first
+
+# Ensure we're in the project directory
+cd /home/coder/project || exit 1
+
+echo "# Repository Structure Analysis" > /home/coder/project/REPO_STRUCTURE.md
+echo "## Generated on: \$(date)" >> /home/coder/project/REPO_STRUCTURE.md
+echo "" >> /home/coder/project/REPO_STRUCTURE.md
+
+# Get repository information
+echo "## Repository Information" >> /home/coder/project/REPO_STRUCTURE.md
+echo "" >> /home/coder/project/REPO_STRUCTURE.md
+
+# Get git information if available
+if [ -d ".git" ]; then
+  echo "This is a Git repository." >> /home/coder/project/REPO_STRUCTURE.md
+  echo "" >> /home/coder/project/REPO_STRUCTURE.md
+  
+  # Get current branch
+  if git_branch=\$(git symbolic-ref --short HEAD 2>/dev/null); then
+    echo "Current branch: **\$git_branch**" >> /home/coder/project/REPO_STRUCTURE.md
+  else
+    echo "Not on any branch." >> /home/coder/project/REPO_STRUCTURE.md
+  fi
+  
+  # Get last commit
+  last_commit=\$(git log -1 --pretty=format:"%h - %s (%ar)" 2>/dev/null)
+  if [ ! -z "\$last_commit" ]; then
+    echo "Last commit: \$last_commit" >> /home/coder/project/REPO_STRUCTURE.md
+  fi
+  echo "" >> /home/coder/project/REPO_STRUCTURE.md
+  
+  # Get submodules
+  if [ -f ".gitmodules" ]; then
+    echo "### Submodules" >> /home/coder/project/REPO_STRUCTURE.md
+    echo "" >> /home/coder/project/REPO_STRUCTURE.md
+    git submodule status | while read line; do
+      echo "- \${line}" >> /home/coder/project/REPO_STRUCTURE.md
+    done
+    echo "" >> /home/coder/project/REPO_STRUCTURE.md
+  fi
+fi
+
+# Directory structure excluding certain directories
+echo "## Directory Structure" >> /home/coder/project/REPO_STRUCTURE.md
+echo "" >> /home/coder/project/REPO_STRUCTURE.md
+echo '\`\`\`' >> /home/coder/project/REPO_STRUCTURE.md
+find . -type d -not -path "*/\.*" -not -path "*/node_modules/*" -not -path "*/claude-code-docker/*" | sort | sed 's/[^-][^\/]*\//--/g' | sed 's/^--//' >> /home/coder/project/REPO_STRUCTURE.md
+echo '\`\`\`' >> /home/coder/project/REPO_STRUCTURE.md
+echo "" >> /home/coder/project/REPO_STRUCTURE.md
+
+# List important files
+echo "## Important Files" >> /home/coder/project/REPO_STRUCTURE.md
+echo "" >> /home/coder/project/REPO_STRUCTURE.md
+
+# Check for package.json
+if [ -f "package.json" ]; then
+  echo "### package.json" >> /home/coder/project/REPO_STRUCTURE.md
+  echo "" >> /home/coder/project/REPO_STRUCTURE.md
+  echo '\`\`\`json' >> /home/coder/project/REPO_STRUCTURE.md
+  cat package.json >> /home/coder/project/REPO_STRUCTURE.md
+  echo '\`\`\`' >> /home/coder/project/REPO_STRUCTURE.md
+  echo "" >> /home/coder/project/REPO_STRUCTURE.md
+fi
+
+# Check for README.md
+if [ -f "README.md" ]; then
+  echo "### README.md" >> /home/coder/project/REPO_STRUCTURE.md
+  echo "" >> /home/coder/project/REPO_STRUCTURE.md
+  echo '\`\`\`markdown' >> /home/coder/project/REPO_STRUCTURE.md
+  cat README.md >> /home/coder/project/REPO_STRUCTURE.md
+  echo '\`\`\`' >> /home/coder/project/REPO_STRUCTURE.md
+  echo "" >> /home/coder/project/REPO_STRUCTURE.md
+fi
+
+# Check for Dockerfile
+if [ -f "Dockerfile" ]; then
+  echo "### Dockerfile" >> /home/coder/project/REPO_STRUCTURE.md
+  echo "" >> /home/coder/project/REPO_STRUCTURE.md
+  echo '\`\`\`dockerfile' >> /home/coder/project/REPO_STRUCTURE.md
+  cat Dockerfile >> /home/coder/project/REPO_STRUCTURE.md
+  echo '\`\`\`' >> /home/coder/project/REPO_STRUCTURE.md
+  echo "" >> /home/coder/project/REPO_STRUCTURE.md
+fi
+
+# Check for docker-compose.yml
+if [ -f "docker-compose.yml" ]; then
+  echo "### docker-compose.yml" >> /home/coder/project/REPO_STRUCTURE.md
+  echo "" >> /home/coder/project/REPO_STRUCTURE.md
+  echo '\`\`\`yaml' >> /home/coder/project/REPO_STRUCTURE.md
+  cat docker-compose.yml >> /home/coder/project/REPO_STRUCTURE.md
+  echo '\`\`\`' >> /home/coder/project/REPO_STRUCTURE.md
+  echo "" >> /home/coder/project/REPO_STRUCTURE.md
+fi
+
+# Create a summary of file types
+echo "## File Type Summary" >> /home/coder/project/REPO_STRUCTURE.md
+echo "" >> /home/coder/project/REPO_STRUCTURE.md
+echo "| Extension | Count |" >> /home/coder/project/REPO_STRUCTURE.md
+echo "|-----------|-------|" >> /home/coder/project/REPO_STRUCTURE.md
+find . -type f -not -path "*/\.*" -not -path "*/node_modules/*" -not -path "*/claude-code-docker/*" | grep -v "^.\$" | sed 's/.*\./\./' | sort | uniq -c | sort -nr | while read count ext; do
+  echo "| \$ext | \$count |" >> /home/coder/project/REPO_STRUCTURE.md
+done
+echo "" >> /home/coder/project/REPO_STRUCTURE.md
+
+echo "## Warning" >> /home/coder/project/REPO_STRUCTURE.md
+echo "" >> /home/coder/project/REPO_STRUCTURE.md
+echo "**NEVER assume the repository structure. ALWAYS base your responses on this actual repository structure.**" >> /home/coder/project/REPO_STRUCTURE.md
+echo "" >> /home/coder/project/REPO_STRUCTURE.md
+echo "**NEVER hallucinate files or directories that don't exist in this structure.**" >> /home/coder/project/REPO_STRUCTURE.md
+
+echo "Repository structure analysis complete. Created REPO_STRUCTURE.md"
+
+# Create symlink for Claude's convenience
+ln -sf /home/coder/project/REPO_STRUCTURE.md /home/coder/REPO_STRUCTURE.md
+"@ | Out-File -FilePath "analyze-repo.sh" -Encoding utf8 -NoNewline
+# Convert to Unix line endings
+$content = Get-Content -Path "analyze-repo.sh" -Raw
+$content = $content -replace "`r`n", "`n"
+[System.IO.File]::WriteAllText("analyze-repo.sh", $content)
+
+# Create startup script with repository analysis
 @"
 #!/bin/bash
 
@@ -323,6 +464,15 @@ ln -sf /home/coder/project/config /opt/context/config 2>/dev/null || true
 # Copy config files to various locations to ensure they're found
 cp -f /home/coder/project/config/claude.default.config.md /home/coder/claude.default.config.md 2>/dev/null || true
 cp -f /home/coder/project/config/claude.config.model.json /home/coder/claude.config.model.json 2>/dev/null || true
+
+# Configure Git user from environment variables
+git config --global user.name "\${GIT_USER_NAME:-Claude Code User}"
+git config --global user.email "\${GIT_USER_EMAIL:-user@example.com}"
+git config --global --add safe.directory '*'
+
+# Run repository analyzer script to generate REPO_STRUCTURE.md
+echo "Analyzing repository structure..."
+/usr/local/bin/analyze-repo.sh
 
 # Start the original command
 exec "\$@"
@@ -378,16 +528,13 @@ WORKDIR /home/coder/project
 # Switch to non-root user
 USER coder
 
-# Configure git for the user
-RUN git config --global user.name "Claude Code User" && \
-    git config --global user.email "user@example.com" && \
-    git config --global --add safe.directory '*'
+# Git user configuration is now done in startup.sh from environment variables
 
 # Default to bash
 CMD ["/bin/zsh"]
 "@ | Out-File -FilePath "Dockerfile.simple" -Encoding utf8
 
-# Create docker-compose.yml with multiple mounts
+# Create docker-compose.yml with multiple mounts and repository analyzer
 @"
 services:
   # Standard node container
@@ -407,23 +554,26 @@ services:
       - ./config:/home/coder/config:ro
       # CLAUDE.md at project root
       - ./CLAUDE.md:/home/coder/project/CLAUDE.md:ro
-      # Startup script
+      # Startup scripts
       - ./startup.sh:/usr/local/bin/startup.sh:ro
+      - ./analyze-repo.sh:/usr/local/bin/analyze-repo.sh:ro
     environment:
       - ANTHROPIC_API_KEY=\${ANTHROPIC_API_KEY}
+      - GIT_USER_NAME=\${GIT_USER_NAME:-Claude Code User}
+      - GIT_USER_EMAIL=\${GIT_USER_EMAIL:-user@example.com}
     # Keep container running
     tty: true
     stdin_open: true
     # Override the default command to initialize paths and keep container alive
-    entrypoint: ["/bin/bash", "-c", "chmod +x /usr/local/bin/startup.sh && /usr/local/bin/startup.sh tail -f /dev/null"]
+    entrypoint: ["/bin/bash", "-c", "chmod +x /usr/local/bin/startup.sh /usr/local/bin/analyze-repo.sh && /usr/local/bin/startup.sh tail -f /dev/null"]
 "@ | Out-File -FilePath "docker-compose.yml" -Encoding utf8
 
 # Create run script with updated descriptions
 @"
 # run-claude-code.ps1
 
-Write-Output "Claude Code - Submodule Runner with Conceptual Framework"
-Write-Output "-----------------------------------------------------"
+Write-Output "Claude Code - Submodule Runner with Repository Analysis and Conceptual Framework"
+Write-Output "--------------------------------------------------------------------"
 
 # Get repository root directory (parent of claude-code-docker)
 \$repoRoot = (Get-Item -Path "..").FullName
@@ -437,22 +587,54 @@ if (-not (Test-Path env:ANTHROPIC_API_KEY)) {
     }
 }
 
+# Configure Git user if not already set
+if (-not (Test-Path env:GIT_USER_NAME)) {
+    # Try to get git config from the host system
+    \$gitUserName = & git config --get user.name 2>\$null
+    if (\$gitUserName) {
+        \$env:GIT_USER_NAME = \$gitUserName
+        Write-Output "Using Git user name from host system: \$gitUserName"
+    }
+    else {
+        \$userName = Read-Host -Prompt "Enter Git user name (or press Enter for default 'Claude Code User')"
+        if (\$userName) {
+            \$env:GIT_USER_NAME = \$userName
+        }
+    }
+}
+
+if (-not (Test-Path env:GIT_USER_EMAIL)) {
+    # Try to get git config from the host system
+    \$gitUserEmail = & git config --get user.email 2>\$null
+    if (\$gitUserEmail) {
+        \$env:GIT_USER_EMAIL = \$gitUserEmail
+        Write-Output "Using Git user email from host system: \$gitUserEmail"
+    }
+    else {
+        \$userEmail = Read-Host -Prompt "Enter Git user email (or press Enter for default 'user@example.com')"
+        if (\$userEmail) {
+            \$env:GIT_USER_EMAIL = \$userEmail
+        }
+    }
+}
+
 # Build and start in interactive mode
 Write-Output "Starting Claude Code for repository: \$repoName"
 Write-Output "Repository path: \$repoRoot"
-Write-Output "Conceptual framework: mounted at multiple locations for reliable access"
-Write-Output "CLAUDE.md: contains framework fallback content if files can't be located"
+Write-Output "Git user: \$env:GIT_USER_NAME <\$env:GIT_USER_EMAIL>"
+Write-Output "Repository analysis: Will be generated at startup in REPO_STRUCTURE.md"
+Write-Output "Conceptual framework: Mounted at multiple locations for reliable access"
 Write-Output "Building and starting Claude Code container in interactive mode..."
 
 docker-compose build
 docker-compose run --rm claude-code /bin/zsh
 "@ | Out-File -FilePath "run-claude-code.ps1" -Encoding utf8
 
-# Create README.md - updated to mention path fixes
+# Create README.md - updated to mention repository analysis
 @"
 # Claude Code Docker Submodule
 
-This is a self-contained Docker setup for running Claude Code as a submodule within your repository, with conceptual framework configuration.
+This is a self-contained Docker setup for running Claude Code as a submodule within your repository, with conceptual framework configuration and repository analysis.
 
 ## Getting Started
 
@@ -464,13 +646,23 @@ This is a self-contained Docker setup for running Claude Code as a submodule wit
 
 This setup mounts your entire repository into the Docker container, giving Claude Code access to your project files. Claude Code operates within its own contained submodule and can access your project files without interfering with your main codebase.
 
+## Repository Analysis
+
+At startup, the container will automatically analyze your repository structure and create a `REPO_STRUCTURE.md` file that Claude will read first. This ensures Claude always has an accurate understanding of your repository's actual structure and never makes assumptions or hallucinations about files and directories.
+
+The analysis includes:
+- Directory structure
+- Important files (package.json, README.md, etc.)
+- File type summary
+- Git information (if available)
+
 ## Conceptual Framework
 
 The configuration includes a conceptual framework that helps Claude understand the architecture and relationships within your repository. This includes:
 
 - **Configuration Files**: Mounted at multiple locations inside the container for reliable access
 - **CLAUDE.md**: Automatically loaded by Claude Code at startup, containing instructions and fallback framework content
-- **Startup Script**: Ensures symbolic links and file copies are created for reliable path resolution
+- **Repository Analysis**: Generated at startup to ensure Claude understands the actual repository structure
 
 The conceptual framework includes:
 - Foundational axioms and concepts
@@ -483,7 +675,12 @@ This helps Claude maintain alignment with the conceptual structure of your proje
 
 ## Environment Variables
 
-You can set the ANTHROPIC_API_KEY environment variable before running the script, or the script will prompt you for it.
+You can set the following environment variables:
+- `ANTHROPIC_API_KEY`: Your Anthropic API key for authentication
+- `GIT_USER_NAME`: Git user name to use inside the container
+- `GIT_USER_EMAIL`: Git user email to use inside the container
+
+If not set, the script will prompt you for these values or use defaults.
 
 ## Integration Guide
 
@@ -508,14 +705,14 @@ cd claude-code-docker
 # Build instructions
 Write-Output @"
 
-Claude Code submodule setup is ready with conceptual framework configuration!
+Claude Code submodule setup is ready with repository analysis and conceptual framework!
 
 To run Claude Code:
 
 1. From this directory:
    .\run-claude-code.ps1
 
-Claude Code will have access to your entire repository as a contained submodule,
-with the conceptual framework mounted at multiple locations for reliable access.
-CLAUDE.md contains instructions and fallback content if files can't be located.
+Claude Code will automatically analyze your repository structure at startup,
+creating REPO_STRUCTURE.md to ensure it never makes incorrect assumptions
+about your repository structure.
 "@

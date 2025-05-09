@@ -14,12 +14,17 @@
       - ./config:/opt/context/config:ro
       - ./config:/home/coder/project/config:ro
       - ./config:/home/coder/config:ro
-      # CLAUDE.md at project root
+      # Documentation files
       - ./CLAUDE.md:/home/coder/project/CLAUDE.md:ro
+      - ./MAX-PLAN.md:/home/coder/project/MAX-PLAN.md:ro
+      - ./MAX-PLAN.md:/home/coder/docs/MAX-PLAN.md:ro
+      # Startup script
+      - ./startup.sh:/usr/local/bin/startup.sh:ro
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - CLAUDE_USE_MAX_PLAN=${CLAUDE_USE_MAX_PLAN}
     # Keep container running
     tty: true
     stdin_open: true
-    # Override the default command to keep container alive
-    command: tail -f /dev/null
+    # Override the default command to initialize paths and keep container alive
+    entrypoint: ["/bin/bash", "-c", "chmod +x /usr/local/bin/startup.sh && /usr/local/bin/startup.sh tail -f /dev/null"]

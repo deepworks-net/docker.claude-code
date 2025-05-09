@@ -1,12 +1,21 @@
 # Docker Claude Code
 
-A self-contained Docker setup for running Anthropic's Claude Code as a submodule in your repository, with full Windows compatibility.
+A self-contained Docker setup for running Anthropic's Claude Code as a submodule in your repository, with full Windows compatibility and Max plan support.
 
 ## What is Claude Code?
 
 Claude Code is an agentic coding tool developed by Anthropic that lives in your terminal, understands your codebase, and helps you code faster through natural language commands. By integrating directly with your development environment, Claude Code streamlines your workflow without requiring additional servers or complex setup.
 
 Since Claude Code officially requires Linux or macOS (with Windows only supported via WSL), this Docker configuration provides a clean way to run it on Windows machines without WSL configuration.
+
+## Max Plan Support
+
+This implementation now fully supports Anthropic's Max plan:
+
+- **Unified Subscription**: Access both Claude (web, desktop, mobile) and Claude Code (terminal) with one subscription
+- **Shared Usage Limits**: Usage limits are shared across both Claude and Claude Code
+- **Seamless Authentication**: Log in with the same Claude credentials you use for the web app
+- **Max Plan Tiers**: Compatible with both 5x Pro usage ($100/month) and 20x Pro usage ($200/month)
 
 ## Architectural Approach
 
@@ -23,12 +32,13 @@ This implementation positions Claude Code as a self-contained submodule:
 - Works on Windows, macOS, and Linux
 - Simple setup process with PowerShell scripts
 - No WSL configuration needed for Windows users
+- Full support for Max plan authentication and usage
 
 ## Prerequisites
 
 - Docker Desktop installed and running
 - PowerShell (for Windows users)
-- An Anthropic API key with Claude Code access
+- An Anthropic Max plan subscription or API key with Claude Code access
 - Git installed on your host machine
 
 ## Quick Start
@@ -53,6 +63,39 @@ This implementation positions Claude Code as a self-contained submodule:
    claude
    ```
 
+4. If using a Max plan, log in with your Claude credentials:
+
+   ```bash
+   # If previously logged in with Anthropic Console PAYG
+   /login
+   ```
+
+## Authentication Options
+
+### Max Plan Authentication
+This setup supports logging in with your Claude Max plan credentials:
+
+- When prompted during setup or first use, log in with the same email and password you use for Claude
+- This connects your Max plan subscription to Claude Code
+- If you're already logged in via Anthropic Console PAYG, run `/login` to switch to Max
+
+### API Key Authentication
+You can also use a direct API key:
+
+- Set the ANTHROPIC_API_KEY environment variable before running
+- The script will prompt for an API key if not set
+
+## Rate Limits with Max Plan
+
+With the Max plan, your usage limits are shared across both Claude and Claude Code:
+
+| Plan | Claude Messages | Claude Code Prompts |
+|------|----------------|---------------------|
+| Max (5x Pro/$100) | ~225 messages / 5 hrs | ~50-200 prompts / 5 hrs |
+| Max (20x Pro/$200) | ~900 messages / 5 hrs | ~200-800 prompts / 5 hrs |
+
+*Note: Usage varies based on message length, complexity, file attachments, and other factors.*
+
 ## How It Works
 
 This project creates a Docker container with:
@@ -76,7 +119,7 @@ your-repository/
 ├── src/                           # Your project source code
 ├── claude-code-docker/            # Claude Code submodule (completely self-contained)
 │   ├── claude.ps1                 # Setup script
-│   ├── Dockerfile.simple          # Docker image definition
+│   ├── Dockerfile                 # Docker image definition
 │   ├── docker-compose.yml         # Docker Compose configuration
 │   ├── README.md                  # Submodule-specific instructions
 │   └── run-claude-code.ps1        # Script to run the container

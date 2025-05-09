@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y \
     vim \
     zsh \
     openssh-client \
+    less \
+    jq \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Claude Code globally
@@ -36,6 +38,10 @@ RUN mkdir -p /opt/context/config && \
 RUN mkdir -p /home/coder/project && \
     chown -R coder:coder /home/coder
 
+# Copy Max Plan documentation (will be added by docker-compose volume mounts)
+RUN mkdir -p /home/coder/docs && \
+    chown -R coder:coder /home/coder/docs
+
 # Set working directory
 WORKDIR /home/coder/project
 
@@ -47,5 +53,8 @@ RUN git config --global user.name "Claude Code User" && \
     git config --global user.email "user@example.com" && \
     git config --global --add safe.directory '*'
 
-# Default to bash
+# Add Claude Code with Max plan support documentation to zsh welcome
+RUN echo 'if [ -f /home/coder/claude-welcome.txt ]; then cat /home/coder/claude-welcome.txt; fi' >> ~/.zshrc
+
+# Default to zsh
 CMD ["/bin/zsh"]

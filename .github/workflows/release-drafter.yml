@@ -1,0 +1,11 @@
+name: Draft Github Release
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - develop
+jobs:
+  update_release_draft:
+    uses: deepworks-net/github.actions/.github/workflows/release-drafter.yml@main
+    with:
+      config-path: .github/release-drafter.yml
