@@ -1,0 +1,212 @@
+{
+  "meta": {
+    "purpose": "FCM compliance validation rules",
+    "version": "0.3.0",
+    "created": "2025-06-03T00:00:00Z",
+    "description": "Validation rules ensuring FCM principles in configuration"
+  },
+  
+  "validation_categories": {
+    "structural": "rules about configuration structure and organization",
+    "conceptual": "rules about FCM conceptual compliance", 
+    "relational": "rules about relationships between components",
+    "evolutionary": "rules about valid configuration evolution"
+  },
+  
+  "structural_rules": {
+    "progressive_definition": {
+      "rule_id": "S001",
+      "description": "all concepts must build from previously defined concepts",
+      "severity": "error",
+      "check_type": "dependency_graph",
+      "implementation": "verify concept definitions only reference earlier concepts or axioms",
+      "error_template": "Concept '{concept}' at line {line} references undefined concept '{dependency}'. Define '{dependency}' before '{concept}' or include in axioms.",
+      "fix_guidance": "1. Move '{dependency}' definition before '{concept}'\n2. Add '{dependency}' to axioms if fundamental\n3. Break circular dependency by introducing intermediate concept"
+    },
+    
+    "self_containment": {
+      "rule_id": "S002", 
+      "description": "configuration must be complete within its scope",
+      "severity": "error",
+      "check_type": "external_reference_detection",
+      "implementation": "verify no references to concepts outside configuration scope",
+      "error_template": "Configuration references external concept '{external}' at line {line}. All concepts must be defined internally or included in axioms.",
+      "fix_guidance": "1. Define '{external}' within configuration\n2. Add '{external}' to axioms if fundamental\n3. Replace '{external}' with equivalent internal concept"
+    },
+    
+    "concept_hierarchy": {
+      "rule_id": "S003",
+      "description": "concepts must follow proper layered hierarchy",
+      "severity": "warning", 
+      "check_type": "layer_validation",
+      "implementation": "verify concepts appear in correct layer (axioms → atomic → components)",
+      "error_template": "Concept '{concept}' appears in wrong layer. '{concept}' should be in '{correct_layer}' not '{current_layer}'.",
+      "fix_guidance": "Move '{concept}' to '{correct_layer}' section to maintain proper hierarchy"
+    }
+  },
+  
+  "conceptual_rules": {
+    "sidecar_compliance": {
+      "rule_id": "C001",
+      "description": "sidecar must maintain lateral relationship",
+      "severity": "error",
+      "check_type": "relationship_analysis", 
+      "implementation": "verify no embedded or hierarchical dependencies",
+      "error_template": "Configuration creates embedded relationship with '{target}' at line {line}. Sidecar must remain beside, not within.",
+      "fix_guidance": "1. Replace embedded reference with lateral interface\n2. Use bridge pattern for communication\n3. Maintain boundary preservation"
+    },
+    
+    "boundary_preservation": {
+      "rule_id": "C002",
+      "description": "boundaries must be explicitly preserved",
+      "severity": "error",
+      "check_type": "boundary_analysis",
+      "implementation": "verify explicit boundary definitions in sidecar relationships", 
+      "error_template": "Boundary not preserved in relationship with '{entity}' at line {line}. Define explicit boundary mechanisms.",
+      "fix_guidance": "1. Add explicit boundary definition\n2. Specify isolation mechanisms\n3. Define interface protocols"
+    },
+    
+    "autonomy_maintenance": {
+      "rule_id": "C003",
+      "description": "entities must maintain operational autonomy",
+      "severity": "warning",
+      "check_type": "autonomy_analysis",
+      "implementation": "verify entities can operate independently",
+      "error_template": "Entity '{entity}' at line {line} lacks operational autonomy. Define independent operational capability.",
+      "fix_guidance": "1. Add independent startup/shutdown capability\n2. Define standalone operational mode\n3. Reduce coupling to other entities"
+    }
+  },
+  
+  "relational_rules": {
+    "lateral_relationships": {
+      "rule_id": "R001", 
+      "description": "relationships must be lateral, not hierarchical",
+      "severity": "error",
+      "check_type": "relationship_pattern_analysis",
+      "implementation": "verify peer relationships rather than parent-child",
+      "error_template": "Hierarchical relationship detected between '{parent}' and '{child}' at line {line}. Use lateral relationship pattern.",
+      "fix_guidance": "1. Replace parent-child with peer relationship\n2. Use coordination rather than control\n3. Implement lateral communication patterns"
+    },
+    
+    "interface_clarity": {
+      "rule_id": "R002",
+      "description": "interfaces between entities must be explicitly defined",
+      "severity": "warning",
+      "check_type": "interface_definition_check",
+      "implementation": "verify explicit interface definitions for entity relationships",
+      "error_template": "Interface not defined between '{entity1}' and '{entity2}' at line {line}. Define explicit communication interface.",
+      "fix_guidance": "1. Add interface definition section\n2. Specify communication protocols\n3. Define data exchange formats"
+    },
+    
+    "coupling_minimization": {
+      "rule_id": "R003",
+      "description": "coupling between entities should be minimal",
+      "severity": "info",
+      "check_type": "coupling_analysis", 
+      "implementation": "measure and report coupling levels between entities",
+      "error_template": "High coupling detected between '{entity1}' and '{entity2}' (coupling_score: {score}). Consider reducing coupling.",
+      "fix_guidance": "1. Use event-driven communication\n2. Implement mediator patterns\n3. Reduce shared state"
+    }
+  },
+  
+  "evolutionary_rules": {
+    "identity_preservation": {
+      "rule_id": "E001",
+      "description": "evolution must preserve conceptual identity", 
+      "severity": "error",
+      "check_type": "identity_comparison",
+      "implementation": "verify core identity preserved across evolution",
+      "error_template": "Evolution changes core identity from '{old_identity}' to '{new_identity}'. Preserve conceptual identity while adapting.",
+      "fix_guidance": "1. Maintain core identity elements\n2. Adapt implementation while preserving concept\n3. Document identity preservation rationale"
+    },
+    
+    "backward_compatibility": {
+      "rule_id": "E002",
+      "description": "evolution should maintain backward compatibility within major version",
+      "severity": "warning",
+      "check_type": "compatibility_analysis",
+      "implementation": "verify existing configurations remain valid",
+      "error_template": "Evolution breaks backward compatibility for configuration element '{element}'. Maintain compatibility within major version.",
+      "fix_guidance": "1. Provide migration path for '{element}'\n2. Support deprecated form temporarily\n3. Document evolution steps"
+    },
+    
+    "learning_capture": {
+      "rule_id": "E003", 
+      "description": "evolution must capture learning from changes",
+      "severity": "info",
+      "check_type": "learning_documentation_check",
+      "implementation": "verify evolution includes learning documentation",
+      "error_template": "Evolution lacks learning documentation. Document insights gained from evolution.",
+      "fix_guidance": "1. Add learning section to evolution log\n2. Document why changes were needed\n3. Record insights for future evolution"
+    }
+  },
+  
+  "validation_execution": {
+    "check_order": [
+      "structural_rules",
+      "conceptual_rules", 
+      "relational_rules",
+      "evolutionary_rules"
+    ],
+    
+    "severity_handling": {
+      "error": {
+        "action": "fail_validation",
+        "exit_code": 1,
+        "message": "Configuration contains FCM compliance errors. Fix errors before proceeding."
+      },
+      "warning": {
+        "action": "warn_continue",
+        "exit_code": 0, 
+        "message": "Configuration has FCM compliance warnings. Consider addressing warnings."
+      },
+      "info": {
+        "action": "report_continue",
+        "exit_code": 0,
+        "message": "Configuration validation complete. See report for improvement suggestions."
+      }
+    },
+    
+    "output_format": {
+      "console": {
+        "error_format": "❌ {rule_id}: {error_template}",
+        "warning_format": "⚠️  {rule_id}: {error_template}",
+        "info_format": "ℹ️  {rule_id}: {error_template}",
+        "guidance_format": "💡 Fix: {fix_guidance}"
+      },
+      
+      "json": {
+        "structure": {
+          "validation_result": "pass|fail|warnings",
+          "timestamp": "ISO 8601 timestamp",
+          "rules_checked": "number of rules executed",
+          "errors": "array of error objects",
+          "warnings": "array of warning objects", 
+          "info": "array of info objects",
+          "summary": "validation summary"
+        }
+      }
+    }
+  },
+  
+  "teaching_integration": {
+    "error_teaching": {
+      "principle": "errors should teach correct structure",
+      "implementation": "include educational content in error messages",
+      "reference_format": "See {model_file} for detailed explanation of {concept}"
+    },
+    
+    "progressive_guidance": {
+      "principle": "guide users through progressive understanding",
+      "implementation": "start with simple fixes, progress to complex understanding",
+      "learning_path": "syntax → structure → concepts → relationships → evolution"
+    },
+    
+    "model_references": {
+      "sidecar_issues": "/home/coder/models/fcm.sidecar.md",
+      "docker_issues": "/home/coder/models/fcm.docker-bridge.md",
+      "config_issues": "/home/coder/models/fcm.config.md",
+      "evolution_issues": "/home/coder/config/evolution.log.json"
+    }
+  }
+}

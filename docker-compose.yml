@@ -10,10 +10,16 @@
       - ..:/home/coder/project:rw
       # Claude Code submodule mount (read-only)
       - ../claude-code-docker:/home/coder/claude-code-docker:ro
+      # FCM models for self-reference
+      - ./models:/home/coder/models:ro
+      - ./models:/opt/context/models:ro
       # Config mounts at multiple possible locations
-      - ./config:/opt/context/config:ro
-      - ./config:/home/coder/project/config:ro
-      - ./config:/home/coder/config:ro
+      - ./config:/opt/context/config:rw
+      - ./config:/home/coder/project/config:rw
+      - ./config:/home/coder/config:rw
+      # Validation tools
+      - ./validation:/home/coder/validation:ro
+      - ./validation:/opt/context/validation:ro
       # Documentation files
       - ./CLAUDE.md:/home/coder/project/CLAUDE.md:ro
     environment:

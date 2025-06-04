@@ -1,0 +1,186 @@
+{
+  "meta": {
+    "model_type": "fcm_configuration",
+    "version": "0.3.0",
+    "created": "2025-06-03T00:00:00Z",
+    "description": "FCM-compliant configuration following progressive definition principles"
+  },
+  
+  "axioms": {
+    "beside": "to exist adjacent to another entity while maintaining distinct identity",
+    "configure": "to arrange elements according to structure",
+    "evolve": "to change progressively while maintaining identity",
+    "validate": "to confirm adherence to established structure",
+    "bridge": "to connect while preserving separate identities"
+  },
+  
+  "atomic_concepts": {
+    "sidecar": {
+      "definition": "any entity existing beside another while providing supplemental capability",
+      "requires": ["beside"],
+      "properties": ["autonomy", "boundary_preservation", "supplemental_capability"]
+    },
+    "configuration": {
+      "definition": "any structured arrangement defining system behavior",
+      "requires": ["configure"],
+      "properties": ["structure", "behavior_definition", "validation_rules"]
+    },
+    "evolution": {
+      "definition": "any progressive change maintaining system identity",
+      "requires": ["evolve"],
+      "properties": ["progressive_change", "identity_preservation", "learning"]
+    },
+    "mount": {
+      "definition": "any volume connection bridging container and host boundaries",
+      "requires": ["bridge"],
+      "properties": ["boundary_crossing", "data_sharing", "isolation_preservation"]
+    }
+  },
+  
+  "conceptual_components": {
+    "lateral_system": {
+      "definition": "any sidecar maintaining beside relationship",
+      "requires": ["sidecar", "beside"],
+      "implementation": "docker container in peer relationship"
+    },
+    "fcm_configuration": {
+      "definition": "any configuration following progressive definition principles",
+      "requires": ["configuration", "validate"],
+      "implementation": "self-validating configuration with evolution tracking"
+    },
+    "docker_sidecar": {
+      "definition": "any containerized sidecar following FCM principles",
+      "requires": ["sidecar", "mount", "configuration"],
+      "implementation": "docker container with volume mounts and network bridges"
+    }
+  },
+  
+  "sidecar_configuration": {
+    "identity": {
+      "name": "Claude Code Docker Sidecar",
+      "version": "0.3.0",
+      "pattern": "FCM-compliant lateral system",
+      "relationship": "beside main repository"
+    },
+    
+    "boundaries": {
+      "container_isolation": true,
+      "volume_mounts": "explicit bridges only",
+      "network_access": "defined interfaces only",
+      "filesystem_access": "mounted paths only"
+    },
+    
+    "capabilities": {
+      "repository_analysis": "read-only access to full repository",
+      "configuration_management": "FCM-compliant configuration evolution",
+      "validation_services": "progressive definition checking",
+      "documentation_generation": "structure-based teaching"
+    },
+    
+    "lifecycle": {
+      "startup": "validate FCM compliance before operation",
+      "runtime": "track usage patterns for evolution",
+      "shutdown": "persist evolution learning",
+      "restart": "apply evolved configuration"
+    }
+  },
+  
+  "validation_rules": {
+    "progressive_definition": {
+      "rule": "all concepts must build from previously defined concepts",
+      "implementation": "dependency graph validation",
+      "error_template": "Concept '{concept}' references undefined '{dependency}'. Define '{dependency}' in axioms or earlier concepts."
+    },
+    
+    "self_containment": {
+      "rule": "configuration must be complete within its scope",
+      "implementation": "external dependency detection",
+      "error_template": "Configuration references external concept '{external}'. Include in axioms or define internally."
+    },
+    
+    "sidecar_compliance": {
+      "rule": "sidecar must maintain lateral relationship",
+      "implementation": "embedded dependency detection",
+      "error_template": "Configuration creates embedded relationship with '{target}'. Maintain beside relationship."
+    },
+    
+    "evolution_validity": {
+      "rule": "evolution must preserve conceptual identity",
+      "implementation": "identity preservation check",
+      "error_template": "Evolution changes core identity '{identity}'. Preserve identity while adapting."
+    }
+  },
+  
+  "evolution_tracking": {
+    "current_version": "0.3.0",
+    "base_version": "0.1.0",
+    "evolution_log": [
+      {
+        "version": "0.2.0",
+        "timestamp": "2025-06-02T00:00:00Z",
+        "changes": ["added FCM framework", "implemented progressive definitions"],
+        "trigger": "need for formal conceptual foundation",
+        "learning": "FCM principles enable self-improving configuration"
+      },
+      {
+        "version": "0.3.0", 
+        "timestamp": "2025-06-03T00:00:00Z",
+        "changes": ["added formal models", "enhanced validation", "evolution tracking"],
+        "trigger": "need for complete FCM implementation",
+        "learning": "formal models enable structural teaching and validation"
+      }
+    ]
+  },
+  
+  "mount_configuration": {
+    "models_mount": {
+      "host_path": "./models",
+      "container_path": "/home/coder/models",
+      "mode": "ro",
+      "purpose": "FCM formal conceptual models access",
+      "validation": "models directory exists with FCM files"
+    },
+    
+    "config_mount": {
+      "host_path": "./config", 
+      "container_path": "/home/coder/config",
+      "mode": "rw",
+      "purpose": "configuration evolution and validation",
+      "validation": "config directory exists with FCM configuration"
+    },
+    
+    "validation_mount": {
+      "host_path": "./validation",
+      "container_path": "/home/coder/validation", 
+      "mode": "ro",
+      "purpose": "FCM validation tools access",
+      "validation": "validation directory exists with checking tools"
+    },
+    
+    "repository_mount": {
+      "host_path": "../",
+      "container_path": "/home/coder/project",
+      "mode": "rw", 
+      "purpose": "full repository access for analysis",
+      "validation": "parent repository exists and accessible"
+    }
+  },
+  
+  "teaching_configuration": {
+    "error_messages": {
+      "mount_failure": "Mount failed. Sidecar requires:\n- Host path exists (boundary preserved)\n- Container path accessible (bridge functional)\n- Permissions aligned (resonance achieved)\n\nSee /home/coder/models/fcm.docker-bridge.md for bridge patterns.",
+      
+      "validation_failure": "FCM validation failed. Configuration violates:\n- Progressive definition (concepts must build from defined foundations)\n- Self-containment (no external dependencies beyond axioms)\n- Sidecar compliance (maintain lateral relationship)\n\nSee /home/coder/models/ for formal definitions.",
+      
+      "evolution_conflict": "Configuration evolution conflict. Attempted change:\n- Violates conceptual identity preservation\n- Creates circular dependencies\n- Breaks FCM compliance\n\nSee evolution.log.json for valid evolution patterns."
+    },
+    
+    "guidance_references": {
+      "sidecar_pattern": "/home/coder/models/fcm.sidecar.md",
+      "docker_implementation": "/home/coder/models/fcm.docker-bridge.md", 
+      "configuration_theory": "/home/coder/models/fcm.config.md",
+      "validation_tools": "/home/coder/validation/",
+      "evolution_log": "/home/coder/config/evolution.log.json"
+    }
+  }
+}

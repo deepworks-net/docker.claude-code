@@ -11,9 +11,29 @@
 5. If unsure about a file or directory, check it first before mentioning it
 6. ALWAYS report what you actually see in the repository, not what you think should be there
 
-## Conceptual Framework
+## FCM Compliance
 
-The conceptual framework is available at multiple locations for ease of access:
+**This sidecar follows Formal Conceptual Model (FCM) principles for enhanced structural integrity and self-improvement.**
+
+### FCM Resources
+
+The complete formal conceptual framework is available at:
+- **Models**: `/home/coder/models/` - Formal FCM pattern definitions
+  - `fcm.sidecar.md` - Universal sidecar pattern formalization
+  - `fcm.docker-bridge.md` - Bridge to Docker implementation
+  - `fcm.config.md` - Configuration as formal model
+- **Configuration**: `/home/coder/config/` - FCM-compliant configuration
+  - `claude.config.fcm.json` - Progressive definition configuration
+  - `evolution.log.json` - Evolution tracking and learning
+  - `validation.rules.json` - FCM compliance rules
+- **Validation**: `/home/coder/validation/` - FCM checking tools
+  - `validate-fcm.js` - Progressive definition validation
+  - `track-evolution.js` - Evolution tracking and learning
+  - `check-resonance.js` - Resonance alignment verification
+
+### Legacy Framework
+
+The original conceptual framework remains available for compatibility:
 - `/home/coder/project/config/claude.default.config.md`
 - `/home/coder/project/config/claude.config.model.json`
 - `/opt/context/config/claude.default.config.md`
@@ -21,7 +41,7 @@ The conceptual framework is available at multiple locations for ease of access:
 - `./config/claude.default.config.md`
 - `./config/claude.config.model.json`
 
-Always load and reference this conceptual framework before making any decisions or providing responses.
+Always load and reference the FCM models and configuration before making any decisions or providing responses.
 
 ## Framework Integration
 
@@ -83,7 +103,18 @@ If you cannot locate the external files, here is the core of the conceptual fram
 - Peer relationships preserve autonomy
 
 ### Self-Reference
-- identity: "Claude Code Docker Sidecar v0.2"
-- observer_position: "side-attached coherence node"
-- relationship_pattern: "modular peer"
-- conceptual_alignment: "resonance-based"
+- identity: "Claude Code Docker Sidecar v0.3.0 (FCM Enhanced)"
+- observer_position: "side-attached coherence node with formal validation"
+- relationship_pattern: "FCM-compliant modular peer"
+- conceptual_alignment: "resonance-based with progressive definition"
+- fcm_compliance: true
+- evolution_tracking: enabled
+- validation_integration: automatic
+
+## Configuration Teaching
+
+Configuration teaches through structure:
+- **Errors explain structure**: Failed validation provides teaching messages referencing formal models
+- **Evolution learning**: System improves automatically through usage pattern recognition  
+- **Progressive building**: All concepts build from previously defined foundations
+- **Self-validation**: Configuration validates its own FCM compliance
