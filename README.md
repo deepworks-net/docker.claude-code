@@ -37,7 +37,6 @@ This implementation positions Claude Code as a self-contained submodule:
 ## Prerequisites
 
 - Docker Desktop installed and running
-- PowerShell (for Windows users)
 - An Anthropic Max plan subscription or API key with Claude Code access
 - Git installed on your host machine
 
@@ -50,23 +49,28 @@ This implementation positions Claude Code as a self-contained submodule:
    git submodule update --init --recursive
    ```
 
-2. Run Claude Code:
+2. Build and run the container:
 
-   ```powershell
+   ```bash
    cd claude-code-docker
-   .\run-claude-code.ps1
+   docker-compose up -d --build
    ```
 
-3. Inside the container, start Claude Code:
+3. Enter the container:
+
+   ```bash
+   docker-compose exec claude-code bash
+   ```
+
+4. Inside the container, start Claude Code:
 
    ```bash
    claude
    ```
 
-4. If using a Max plan, log in with your Claude credentials:
+5. If using a Max plan, log in with your Claude credentials:
 
    ```bash
-   # If previously logged in with Anthropic Console PAYG
    /login
    ```
 
