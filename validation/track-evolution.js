@@ -37,7 +37,7 @@ class EvolutionTracker {
                 version_format: "semantic versioning (major.minor.patch)"
             },
             current_state: {
-                version: "0.3.0",
+                version: "0.3.1",
                 timestamp: new Date().toISOString(),
                 fcm_compliance: true,
                 validation_status: "pending",

@@ -9,6 +9,16 @@
 const fs = require('fs');
 const path = require('path');
 
+// Cache for loaded files to improve performance
+const CACHE = {
+    validationRules: null,
+    evolutionLog: null,
+    lastValidationResult: null,
+    lastValidationTime: 0
+};
+
+const CACHE_TTL = 5000; // 5 seconds cache TTL
+
 class FCMValidator {
     constructor() {
         this.errors = [];
@@ -20,10 +30,17 @@ class FCMValidator {
     }
 
     async loadValidationRules() {
+        // Use cached rules if available and fresh
+        if (CACHE.validationRules) {
+            this.validationRules = CACHE.validationRules;
+            return true;
+        }
+
         try {
             const rulesPath = path.join(this.configPath, 'validation.rules.json');
             const rulesContent = fs.readFileSync(rulesPath, 'utf8');
             this.validationRules = JSON.parse(rulesContent);
+            CACHE.validationRules = this.validationRules; // Cache for future use
             return true;
         } catch (error) {
             this.errors.push({
@@ -36,6 +53,18 @@ class FCMValidator {
     }
 
     async validateConfiguration(configFile) {
+        // Check cache for recent validation result
+        const now = Date.now();
+        if (CACHE.lastValidationResult && 
+            CACHE.lastValidationTime > now - CACHE_TTL &&
+            CACHE.lastValidationResult.configFile === configFile) {
+            console.log(`🔍 Using cached validation result for ${configFile}...`);
+            this.errors = CACHE.lastValidationResult.errors;
+            this.warnings = CACHE.lastValidationResult.warnings;
+            this.info = CACHE.lastValidationResult.info;
+            return CACHE.lastValidationResult.success;
+        }
+
         console.log(`🔍 Validating FCM compliance for ${configFile}...`);
         
         if (!await this.loadValidationRules()) {
@@ -62,7 +91,19 @@ class FCMValidator {
         this.validateRelationalRules(config);
         this.validateEvolutionaryRules(config);
 
-        return this.reportResults();
+        const success = this.reportResults();
+        
+        // Cache the validation result
+        CACHE.lastValidationResult = {
+            configFile,
+            success,
+            errors: [...this.errors],
+            warnings: [...this.warnings],
+            info: [...this.info]
+        };
+        CACHE.lastValidationTime = Date.now();
+        
+        return success;
     }
 
     validateStructuralRules(config) {
@@ -113,11 +154,15 @@ class FCMValidator {
     validateEvolutionaryRules(config) {
         console.log('🔄 Checking evolutionary rules...');
         
-        // Load evolution log if available
-        try {
-            const evolutionPath = path.join(this.configPath, 'evolution.log.json');
-            const evolutionContent = fs.readFileSync(evolutionPath, 'utf8');
-            const evolutionLog = JSON.parse(evolutionContent);
+        // Load evolution log if available (with caching)
+        let evolutionLog = CACHE.evolutionLog;
+        
+        if (!evolutionLog) {
+            try {
+                const evolutionPath = path.join(this.configPath, 'evolution.log.json');
+                const evolutionContent = fs.readFileSync(evolutionPath, 'utf8');
+                evolutionLog = JSON.parse(evolutionContent);
+                CACHE.evolutionLog = evolutionLog;
             
             // E001: Identity Preservation
             this.checkIdentityPreservation(config, evolutionLog);

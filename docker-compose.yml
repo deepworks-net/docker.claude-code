@@ -1,5 +1,4 @@
 ﻿services:
-  # Standard node container
   claude-code:
     image: claude-code:latest
     build:
@@ -8,24 +7,14 @@
     volumes:
       # Main repository mount
       - ..:/home/coder/project:rw
-      # Claude Code submodule mount (read-only)
-      - ../claude-code-docker:/home/coder/claude-code-docker:ro
-      # FCM models for self-reference
-      - ./models:/home/coder/models:ro
-      - ./models:/opt/context/models:ro
-      # Config mounts at multiple possible locations
-      - ./config:/opt/context/config:rw
+      # FCM resources (models, config, validation)
+      - ./models:/home/coder/project/models:ro
       - ./config:/home/coder/project/config:rw
-      - ./config:/home/coder/config:rw
-      # Validation tools
-      - ./validation:/home/coder/validation:ro
-      - ./validation:/opt/context/validation:ro
-      # Documentation files
+      - ./validation:/home/coder/project/validation:ro
+      # Documentation
       - ./CLAUDE.md:/home/coder/project/CLAUDE.md:ro
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-    # Keep container running
     tty: true
     stdin_open: true
-    # Override the default command to initialize paths and keep container alive
     command: tail -f /dev/null

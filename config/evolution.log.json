@@ -6,12 +6,12 @@
   },
   
   "current_state": {
-    "version": "0.3.0",
-    "timestamp": "2025-06-03T00:00:00Z",
+    "version": "0.3.1",
+    "timestamp": "2025-06-04T00:00:00Z",
     "fcm_compliance": true,
     "validation_status": "passing",
     "active_mounts": ["models", "config", "validation", "repository"],
-    "capabilities": ["analysis", "validation", "teaching", "evolution"]
+    "capabilities": ["analysis", "validation", "teaching", "evolution", "performance_optimization"]
   },
   
   "evolution_history": [

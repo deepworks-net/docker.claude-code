@@ -1,6 +1,6 @@
-# Docker Claude Code
+# Docker Claude Code v0.3.1
 
-A self-contained Docker setup for running Anthropic's Claude Code as a submodule in your repository, with full Windows compatibility and Max plan support.
+A self-contained Docker setup for running Anthropic's Claude Code as a FCM-compliant sidecar in your repository, with full Windows compatibility and Max plan support.
 
 ## What is Claude Code?
 
