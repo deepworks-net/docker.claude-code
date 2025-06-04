@@ -1,0 +1,31 @@
+{
+  "validation_result": "warnings",
+  "timestamp": "2025-06-04T20:46:05.602Z",
+  "rules_checked": 12,
+  "errors": [],
+  "warnings": [
+    {
+      "rule_id": "R001",
+      "message": "Configuration contains hierarchical pattern 'parent'",
+      "fix_guidance": "Use lateral relationship patterns (peer, beside, coordinated)"
+    },
+    {
+      "rule_id": "E001",
+      "message": "Evolution may have changed core identity pattern",
+      "fix_guidance": "Verify that core identity is preserved through evolution"
+    }
+  ],
+  "info": [
+    {
+      "rule_id": "E002",
+      "message": "3 versions in major version 0",
+      "fix_guidance": "Ensure backward compatibility within major version"
+    }
+  ],
+  "summary": {
+    "total_issues": 3,
+    "error_count": 0,
+    "warning_count": 2,
+    "info_count": 1
+  }
+}
