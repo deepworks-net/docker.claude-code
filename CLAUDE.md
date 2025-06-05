@@ -1,5 +1,15 @@
 # Claude Memory and Configuration
 
+## CRITICAL: EXECUTION CONTEXT
+
+**YOU ARE RUNNING INSIDE A DOCKER CONTAINER, NOT ON THE HOST SYSTEM.**
+
+- Working directory: `/home/coder/project/docker.claude-code`
+- You are inside the claude-code container with the repository mounted
+- All paths are relative to the container filesystem
+- The repository is mounted at `/home/coder/project`
+- You cannot directly access the host filesystem
+
 ## CRITICAL: REPOSITORY AWARENESS
 
 **YOU MUST ALWAYS ANALYZE THE CURRENT REPOSITORY STRUCTURE FIRST BEFORE MAKING ANY STATEMENTS OR ASSUMPTIONS.**

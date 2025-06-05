@@ -127,6 +127,11 @@
         "docker_layers_reduced": "from 8 to 2",
         "volume_mounts_reduced": "from 10+ to 5",
         "validation_cache_hit_rate": "80%+ expected"
+      },
+      "identity_preservation": {
+        "core_pattern": "sidecar:beside:supplemental:autonomous",
+        "preserved": true,
+        "rationale": "housekeeping maintains identity while improving implementation"
       }
     }
   ],

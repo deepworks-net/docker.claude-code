@@ -58,9 +58,11 @@
   "sidecar_configuration": {
     "identity": {
       "name": "Claude Code Docker Sidecar",
-      "version": "0.3.0",
+      "version": "0.3.1",
       "pattern": "FCM-compliant lateral system",
-      "relationship": "beside main repository"
+      "relationship": "beside main repository",
+      "core_identity": "sidecar:beside:supplemental:autonomous",
+      "identity_preserved_since": "0.1.0"
     },
     
     "boundaries": {
@@ -162,7 +164,7 @@
       "container_path": "/home/coder/project",
       "mode": "rw", 
       "purpose": "full repository access for analysis",
-      "validation": "parent repository exists and accessible"
+      "validation": "host repository exists and accessible"
     }
   },
   
