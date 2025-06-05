@@ -95,7 +95,7 @@
     {
       "version": "0.3.1",
       "timestamp": "2025-06-04T00:00:00Z",
-      "description": "Housekeeping optimization - resonance through simplification",
+      "description": "Housekeeping optimization - resonance through simplification maintaining FCM-compliant lateral system",
       "changes": [
         "removed obsolete PowerShell scripts (build-claude-code.ps1, run-claude-code.ps1)",
         "simplified startup.sh with consolidated symlink creation",

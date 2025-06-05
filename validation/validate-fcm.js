@@ -163,23 +163,24 @@ class FCMValidator {
                 const evolutionContent = fs.readFileSync(evolutionPath, 'utf8');
                 evolutionLog = JSON.parse(evolutionContent);
                 CACHE.evolutionLog = evolutionLog;
-            
-            // E001: Identity Preservation
-            this.checkIdentityPreservation(config, evolutionLog);
-            
-            // E002: Backward Compatibility
-            this.checkBackwardCompatibility(config, evolutionLog);
-            
-            // E003: Learning Capture
-            this.checkLearningCapture(evolutionLog);
-            
-        } catch (error) {
-            this.info.push({
-                rule_id: 'E000',
-                message: 'Evolution log not found - skipping evolutionary validation',
-                fix_guidance: 'Create evolution.log.json to track configuration evolution'
-            });
+            } catch (error) {
+                this.info.push({
+                    rule_id: 'E000',
+                    message: 'Evolution log not found - skipping evolutionary validation',
+                    fix_guidance: 'Create evolution.log.json to track configuration evolution'
+                });
+                return;
+            }
         }
+        
+        // E001: Identity Preservation
+        this.checkIdentityPreservation(config, evolutionLog);
+        
+        // E002: Backward Compatibility
+        this.checkBackwardCompatibility(config, evolutionLog);
+        
+        // E003: Learning Capture
+        this.checkLearningCapture(evolutionLog);
     }
 
     checkProgressiveDefinition(concepts, axioms) {
