@@ -380,29 +380,54 @@ class ResonanceChecker {
         
         console.log(`\\n${scoreEmoji} Resonance Score: ${this.results.resonance_score}/100`);
         
-        // Alignment issues
-        if (this.results.alignment_issues.length > 0) {
-            console.log('\\n🔧 Alignment Issues:');
-            this.results.alignment_issues.forEach(issue => {
-                const emoji = issue.impact === 'critical' ? '🚨' : 
-                             issue.impact === 'high' ? '❗' : 
-                             issue.impact === 'medium' ? '⚠️' : 'ℹ️';
-                console.log(`   ${emoji} ${issue.type}: ${issue.message}`);
+        // Group all issues by impact level
+        const allIssues = [
+            ...this.results.alignment_issues.map(i => ({...i, category: 'Alignment'})),
+            ...this.results.geometric_violations.map(v => ({...v, category: 'Geometric'}))
+        ];
+        
+        const criticalIssues = allIssues.filter(i => i.impact === 'critical');
+        const highIssues = allIssues.filter(i => i.impact === 'high');
+        const mediumIssues = allIssues.filter(i => i.impact === 'medium');
+        const lowIssues = allIssues.filter(i => i.impact === 'low');
+        
+        // Display issues grouped by severity
+        if (criticalIssues.length > 0) {
+            console.log('\\n🚨 CRITICAL ISSUES:');
+            criticalIssues.forEach(issue => {
+                console.log(`   [${issue.category}] ${issue.type}: ${issue.message}`);
                 console.log(`      💡 Fix: ${issue.fix}\\n`);
             });
         }
         
-        // Geometric violations
-        if (this.results.geometric_violations.length > 0) {
-            console.log('\\n📐 Geometric Violations:');
-            this.results.geometric_violations.forEach(violation => {
-                const emoji = violation.impact === 'critical' ? '🚨' : 
-                             violation.impact === 'high' ? '❗' : 
-                             violation.impact === 'medium' ? '⚠️' : 'ℹ️';
-                console.log(`   ${emoji} ${violation.type}: ${violation.message}`);
-                console.log(`      💡 Fix: ${violation.fix}\\n`);
+        if (highIssues.length > 0) {
+            console.log('\\n❗ HIGH PRIORITY ISSUES:');
+            highIssues.forEach(issue => {
+                console.log(`   [${issue.category}] ${issue.type}: ${issue.message}`);
+                console.log(`      💡 Fix: ${issue.fix}\\n`);
             });
         }
+        
+        if (mediumIssues.length > 0) {
+            console.log('\\n⚠️  MEDIUM PRIORITY ISSUES:');
+            mediumIssues.forEach(issue => {
+                console.log(`   [${issue.category}] ${issue.type}: ${issue.message}`);
+                console.log(`      💡 Fix: ${issue.fix}\\n`);
+            });
+        }
+        
+        if (lowIssues.length > 0) {
+            console.log('\\nℹ️  LOW PRIORITY ISSUES:');
+            lowIssues.forEach(issue => {
+                console.log(`   [${issue.category}] ${issue.type}: ${issue.message}`);
+                console.log(`      💡 Fix: ${issue.fix}\\n`);
+            });
+        }
+        
+        // Summary line with counts
+        console.log('\\n📊 ISSUE SUMMARY:');
+        console.log(`   🚨 Critical: ${criticalIssues.length} | ❗ High: ${highIssues.length} | ⚠️  Medium: ${mediumIssues.length} | ℹ️  Low: ${lowIssues.length}`);
+        console.log(`   Total Issues: ${allIssues.length}`);
         
         // Recommendations
         if (this.results.recommendations.length > 0) {

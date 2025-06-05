@@ -12,7 +12,7 @@ This guide explains how to use Claude Code with your Anthropic Max plan subscrip
 
 When using Claude Code with your Max plan, you'll need to log in with the same credentials you use for Claude.ai:
 
-1. Start the container using `.\run-claude-code.ps1` and select "Max Plan" authentication
+1. Start the container using `docker-compose up -d --build`
 2. Inside the container, run `claude` to start Claude Code
 3. If you haven't logged in before, you'll be automatically prompted for credentials
 4. If you were previously using API key authentication, run `/login` to switch to Max plan

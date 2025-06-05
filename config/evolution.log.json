@@ -6,7 +6,7 @@
   },
   
   "current_state": {
-    "version": "0.3.1",
+    "version": "0.3.2",
     "timestamp": "2025-06-04T00:00:00Z",
     "fcm_compliance": true,
     "validation_status": "passing",
@@ -132,6 +132,25 @@
         "core_pattern": "sidecar:beside:supplemental:autonomous",
         "preserved": true,
         "rationale": "housekeeping maintains identity while improving implementation"
+      }
+    },
+    
+    {
+      "version": "0.3.2",
+      "timestamp": "2025-06-05T00:00:00Z",
+      "description": "Focused maintenance improvements",
+      "changes": [
+        "fixed MAX-PLAN.md PowerShell script references",
+        "enhanced resonance checker output format",
+        "added simple usage pattern report generator"
+      ],
+      "trigger": "maintenance and clarity improvements",
+      "learning": "focused patches prevent scope creep",
+      "fcm_compliance": true,
+      "identity_preservation": {
+        "core_pattern": "sidecar:beside:supplemental:autonomous",
+        "preserved": true,
+        "rationale": "maintenance preserves all conceptual patterns"
       }
     }
   ],

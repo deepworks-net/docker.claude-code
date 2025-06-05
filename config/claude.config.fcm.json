@@ -1,7 +1,7 @@
 {
   "meta": {
     "model_type": "fcm_configuration",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "created": "2025-06-03T00:00:00Z",
     "description": "FCM-compliant configuration following progressive definition principles"
   },
@@ -58,7 +58,7 @@
   "sidecar_configuration": {
     "identity": {
       "name": "Claude Code Docker Sidecar",
-      "version": "0.3.1",
+      "version": "0.3.2",
       "pattern": "FCM-compliant lateral system",
       "relationship": "beside main repository",
       "core_identity": "sidecar:beside:supplemental:autonomous",
@@ -114,7 +114,7 @@
   },
   
   "evolution_tracking": {
-    "current_version": "0.3.0",
+    "current_version": "0.3.2",
     "base_version": "0.1.0",
     "evolution_log": [
       {
