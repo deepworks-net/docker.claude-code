@@ -9,6 +9,9 @@ RUN apt-get update && apt-get install -y \
     openssh-client \
     less \
     jq \
+    python3 \
+    python3-pip \
+    python3-venv \
     && rm -rf /var/lib/apt/lists/* \
     && npm install -g @anthropic-ai/claude-code \
     && useradd -m -s /bin/bash coder || true \
