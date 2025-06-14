@@ -28,15 +28,15 @@
 ### FCM Resources
 
 The complete formal conceptual framework is available at:
-- **Models**: `/home/coder/models/` - Formal FCM pattern definitions
+- **Models**: `/home/coder/project/docker.claude-code/models/` - Formal FCM pattern definitions
   - `fcm.sidecar.md` - Universal sidecar pattern formalization
   - `fcm.docker-bridge.md` - Bridge to Docker implementation
   - `fcm.config.md` - Configuration as formal model
-- **Configuration**: `/home/coder/config/` - FCM-compliant configuration
+- **Configuration**: `/home/coder/project/docker.claude-code/config/` - FCM-compliant configuration
   - `claude.config.fcm.json` - Progressive definition configuration
   - `evolution.log.json` - Evolution tracking and learning
   - `validation.rules.json` - FCM compliance rules
-- **Validation**: `/home/coder/validation/` - FCM checking tools
+- **Validation**: `/home/coder/project/docker.claude-code/validation/` - FCM checking tools
   - `validate-fcm.js` - Progressive definition validation
   - `track-evolution.js` - Evolution tracking and learning
   - `check-resonance.js` - Resonance alignment verification

@@ -7,12 +7,12 @@
     volumes:
       # Main repository mount
       - ..:/home/coder/project:rw
-      # FCM resources (models, config, validation)
-      - ./models:/home/coder/project/models:ro
-      - ./config:/home/coder/project/config:rw
-      - ./validation:/home/coder/project/validation:ro
+      # FCM resources (models, config, validation) - mounted within claude-code directory
+      - ./models:/home/coder/project/docker.claude-code/models:ro
+      - ./config:/home/coder/project/docker.claude-code/config:rw
+      - ./validation:/home/coder/project/docker.claude-code/validation:ro
       # Documentation
-      - ./CLAUDE.md:/home/coder/project/CLAUDE.md:ro
+      - ./CLAUDE.md:/home/coder/project/docker.claude-code/CLAUDE.md:ro
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
     tty: true
