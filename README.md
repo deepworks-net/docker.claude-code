@@ -45,7 +45,11 @@ This implementation positions Claude Code as a self-contained submodule:
 1. Add this repository as a submodule:
 
    ```bash
-   git submodule add https://github.com/yourusername/docker.claude-code.git claude-code-docker
+   # If you use SSH for GIT
+   git submodule add git@github.com:deepworks-net/docker.claude-code.git claude-code-docker
+   # Or use HTTPS
+   git submodule add https://github.com/deepworks-net/docker.claude-code.git claude-code-docker
+   # Then force an update for the submodule
    git submodule update --init --recursive
    ```
 
