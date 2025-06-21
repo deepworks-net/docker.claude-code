@@ -12,7 +12,7 @@ This version restructures the Docker setup for maximum flexibility:
 
 - **User Repository**: Your project files remain at the root level
 - **Claude Configuration**: All Claude-specific files are in the `claude/` folder
-- **Clean Separation**: No submodules or nested dependencies
+- **Clean Separation**: Submodules are optional—this repo can be added directly or as a git submodule
 - **Easy Integration**: Drop into any project with minimal setup
 
 ## Max Plan Support
@@ -75,6 +75,19 @@ docker-compose up -d
 docker-compose exec claude-code bash
 ```
 
+### Option 3: Add as Git Submodule (Legacy/Advanced)
+
+```bash
+# If using SSH
+git submodule add git@github.com:deepworks-net/docker.claude-code.git claude-docker
+# Or using HTTPS
+git submodule add https://github.com/deepworks-net/docker.claude-code.git claude-docker
+git submodule update --init --recursive
+```
+
+Both the download method and submodule method place the files in the same
+`claude-docker` directory, so the Docker commands remain identical.
+
 ## Project Structure After Setup
 
 ```
@@ -82,7 +95,7 @@ your-project/
 ├── src/                    # Your project source code
 ├── docs/                   # Your project documentation  
 ├── package.json           # Your project dependencies
-├── claude-docker/         # Claude Code Docker setup (Option 1)
+├── claude-docker/         # Claude Code Docker setup (Option 1 or 3)
 │   ├── Dockerfile
 │   ├── docker-compose.yml
 │   ├── startup.sh
@@ -182,3 +195,4 @@ If you're upgrading from a previous version:
 1. Move your `config/`, `models/`, and `validation/` folders into a new `claude/` folder
 2. Update your docker-compose.yml volume mounts to point to `./claude` instead of individual folders
 3. The new working directory is `/home/coder/project/repository` (your actual project)
+4. If you previously included this repo as a git submodule, keep it in the `claude-docker/` directory so the compose volumes remain the same
