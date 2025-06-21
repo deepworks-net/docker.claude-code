@@ -1,0 +1,45 @@
+name: Update Changelog
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  update-changelog:
+    if: github.event.pull_request.merged == true
+    uses: deepworks-net/github.actions/.github/workflows/update-changelog.yml@v1
+    with:
+      changelog_file: CHANGELOG.md
+      pr_title: ${{ github.event.pull_request.title }}
+      pr_number: ${{ github.event.pull_request.number }}
+      pr_author: ${{ github.event.pull_request.user.login }}
+      
+  update-evolution-log:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Update Evolution Log
+        run: |
+          # Check if this is a version-changing PR
+          if echo "${{ github.event.pull_request.title }}" | grep -E "(feat|fix|breaking|major|minor|patch)"; then
+            echo "Version-changing PR detected, evolution log will be updated during release"
+          else
+            echo "Non-version PR, no evolution log update needed"
+          fi
+          
+      - name: Commit changes
+        if: success()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git add .
+            git commit -m "chore: update evolution log for PR #${{ github.event.pull_request.number }}"
+            git push
+          fi

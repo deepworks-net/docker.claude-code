@@ -1,0 +1,98 @@
+name-template: 'Docker Claude Code v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+categories:
+  - title: '🚀 Features'
+    labels:
+      - 'feature'
+      - 'enhancement'
+  - title: '🐛 Bug Fixes'
+    labels:
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+  - title: '🧰 Maintenance'
+    labels:
+      - 'chore'
+      - 'dependencies'
+      - 'maintenance'
+  - title: '📖 Documentation'
+    labels:
+      - 'documentation'
+      - 'docs'
+  - title: '🔧 FCM Enhancements'
+    labels:
+      - 'fcm'
+      - 'validation'
+      - 'evolution'
+
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
+
+version-resolver:
+  major:
+    labels:
+      - 'major'
+      - 'breaking'
+  minor:
+    labels:
+      - 'minor'
+      - 'feature'
+      - 'enhancement'
+  patch:
+    labels:
+      - 'patch'
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+      - 'chore'
+      - 'dependencies'
+      - 'maintenance'
+      - 'documentation'
+      - 'docs'
+  default: patch
+
+template: |
+  ## What's Changed
+  
+  $CHANGES
+  
+  ## Docker Images
+  
+  This release includes Docker images for multiple architectures:
+  - `deepworks/claude-code:$RESOLVED_VERSION`
+  - `deepworks/claude-code:latest`
+  
+  Available architectures: `linux/amd64`, `linux/arm64`
+  
+  ## Installation
+  
+  ### Method 1: Git Submodule
+  ```bash
+  git submodule add https://github.com/deepworks-net/docker.claude-code.git claude-docker
+  cd claude-docker
+  docker-compose up -d --build
+  ```
+  
+  ### Method 2: Direct Download
+  ```bash
+  curl -L https://github.com/deepworks-net/docker.claude-code/archive/v$RESOLVED_VERSION.zip -o claude-docker.zip
+  unzip claude-docker.zip
+  cd docker.claude-code-$RESOLVED_VERSION
+  docker-compose up -d --build
+  ```
+  
+  ## FCM Compliance
+  
+  This release maintains FCM (Formal Conceptual Model) compliance:
+  - ✅ Progressive definition validation
+  - ✅ Evolution tracking
+  - ✅ Sidecar pattern preservation
+  - ✅ Identity preservation: `sidecar:beside:supplemental:autonomous`
+  
+  ## Support
+  
+  - 📖 [Documentation](https://github.com/deepworks-net/docker.claude-code/blob/main/README.md)
+  - 🐛 [Report Issues](https://github.com/deepworks-net/docker.claude-code/issues)
+  - 📋 [Max Plan Guide](https://github.com/deepworks-net/docker.claude-code/blob/main/MAX-PLAN.md)
+  
+  **Full Changelog**: https://github.com/deepworks-net/docker.claude-code/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION

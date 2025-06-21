@@ -1,0 +1,49 @@
+name: Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - '*.md'
+      - 'mkdocs.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - '*.md'
+      - 'mkdocs.yml'
+
+jobs:
+  deploy-docs:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    uses: deepworks-net/github.actions/.github/workflows/mkdocs-gh-pages.yml@v1
+    with:
+      python_version: '3.11'
+      copy_readme: true
+      copy_changelog: true
+      
+  validate-docs:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          pip install mkdocs-material
+          pip install mkdocs-mermaid2-plugin
+          
+      - name: Build docs
+        run: |
+          if [ -f "mkdocs.yml" ]; then
+            mkdocs build --strict
+          else
+            echo "No mkdocs.yml found, skipping build"
+          fi
