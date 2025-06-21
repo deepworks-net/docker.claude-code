@@ -6,16 +6,16 @@ on:
 
 jobs:
   prepare-release:
-    uses: deepworks-net/github.actions/.github/workflows/prepare-release.yml@v1
+    uses: deepworks-net/github.toolkit/.github/workflows/prepare-release.yml@v1
     with:
       changelog_path: CHANGELOG.md
       
   calculate-version:
-    uses: deepworks-net/github.actions/.github/workflows/core.action.version_calculator.yml@v1
+    uses: deepworks-net/github.toolkit/.github/workflows/core.action.version_calculator.yml@v1
       
   update-files:
     needs: calculate-version
-    uses: deepworks-net/github.actions/.github/workflows/core.action.version_updater.yml@v1
+    uses: deepworks-net/github.toolkit/.github/workflows/core.action.version_updater.yml@v1
     with:
       version: ${{ needs.calculate-version.outputs.next_version }}
       files: |
@@ -23,12 +23,3 @@ jobs:
         CLAUDE.md
         README.md
         config/evolution.log.json
-
-  create-release:
-    needs: [calculate-version, update-files]
-    uses: deepworks-net/github.actions/.github/workflows/release-drafter.yml@v1
-    with:
-      tag: ${{ needs.calculate-version.outputs.next_version }}
-      name: "Docker Claude Code v${{ needs.calculate-version.outputs.next_version }}"
-      draft: false
-      prerelease: false
