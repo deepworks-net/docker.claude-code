@@ -26,34 +26,8 @@ jobs:
         README.md
         config/evolution.log.json
 
-  docker-build:
-    needs: update-files
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: |
-            deepworks/claude-code:latest
-            deepworks/claude-code:${{ needs.calculate-version.outputs.next_version }}
-          platforms: linux/amd64,linux/arm64
-
   create-release:
-    needs: [calculate-version, docker-build]
+    needs: [calculate-version, update-files]
     uses: deepworks-net/github.actions/.github/workflows/release-drafter.yml@v1
     with:
       tag: ${{ needs.calculate-version.outputs.next_version }}
