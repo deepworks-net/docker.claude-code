@@ -12,8 +12,6 @@ jobs:
       
   calculate-version:
     uses: deepworks-net/github.actions/.github/workflows/core.action.version_calculator.yml@v1
-    outputs:
-      next_version: ${{ jobs.calculate-version.outputs.next_version }}
       
   update-files:
     needs: calculate-version
