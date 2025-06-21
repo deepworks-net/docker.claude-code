@@ -1,6 +1,6 @@
 ﻿services:
   claude-code:
-    image: claude-code:latest
+    image: deepworks/claude-code:latest
     build:
       context: .
       dockerfile: Dockerfile
