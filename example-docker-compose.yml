@@ -1,0 +1,46 @@
+# Example docker-compose.yml for integrating Claude Code into your project
+# Copy this to your project root and customize as needed
+services:
+  claude-code:
+    # Option 1: Build from downloaded source
+    build:
+      context: ./claude-docker  # Path to downloaded docker.claude-code folder
+      dockerfile: Dockerfile
+    
+    # Option 2: Use pre-built image (when available)
+    # image: deepworks/claude-code:latest
+    
+    volumes:
+      # Mount your project (current directory) as the working repository
+      - .:/home/coder/project:rw
+      
+      # Mount Claude configuration from the source repo folders to user's claude/ folder
+      - ./claude-docker/config:/home/coder/claude/config:rw
+      - ./claude-docker/models:/home/coder/claude/models:ro  
+      - ./claude-docker/validation:/home/coder/claude/validation:ro
+      
+      # Legacy compatibility links (for existing configs)
+      - ./claude-docker/config:/home/coder/config:ro
+      - ./claude-docker/models:/home/coder/models:ro
+      - ./claude-docker/validation:/home/coder/validation:ro
+    
+    environment:
+      # Set your Anthropic API key (or use Max plan login inside container)
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      
+      # Optional: Enable Max plan startup information
+      - CLAUDE_USE_MAX_PLAN=true
+    
+    # Set working directory to your project
+    working_dir: /home/coder/project
+    
+    # Keep container running
+    tty: true
+    stdin_open: true
+
+# Usage:
+# 1. Copy this file to your project root as docker-compose.yml
+# 2. Download docker.claude-code to ./claude-docker/ folder  
+# 3. Run: docker-compose up -d
+# 4. Enter: docker-compose exec claude-code bash
+# 5. Start Claude: claude
