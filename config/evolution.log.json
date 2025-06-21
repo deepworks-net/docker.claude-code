@@ -6,12 +6,12 @@
   },
   
   "current_state": {
-    "version": "0.3.2",
-    "timestamp": "2025-06-04T00:00:00Z",
+    "version": "0.4.0",
+    "timestamp": "2025-06-06T00:00:00Z",
     "fcm_compliance": true,
     "validation_status": "passing",
     "active_mounts": ["models", "config", "validation", "repository"],
-    "capabilities": ["analysis", "validation", "teaching", "evolution", "performance_optimization"]
+    "capabilities": ["analysis", "validation", "teaching", "evolution", "performance_optimization", "flexible_integration"]
   },
   
   "evolution_history": [
@@ -152,6 +152,46 @@
         "preserved": true,
         "rationale": "maintenance preserves all conceptual patterns"
       }
+    },
+    
+    {
+      "version": "0.4.0",
+      "timestamp": "2025-06-06T00:00:00Z",
+      "description": "Architectural restructuring for flexible integration",
+      "changes": [
+        "restructured as add-on to user repositories",
+        "moved Claude configuration to dedicated claude/ folder",
+        "enabled both submodule and download installation methods",
+        "updated volume mount paths for new structure",
+        "preserved sidecar relationship at new structural level"
+      ],
+      "trigger": "need for easier integration into existing projects",
+      "learning": "sidecar pattern scales to repository integration level",
+      "fcm_compliance": true,
+      "evolution_drivers": [
+        "user feedback on integration complexity",
+        "need for cleaner separation of concerns",
+        "desire for multiple installation options",
+        "requirement for non-intrusive addition to projects"
+      ],
+      "improvements": [
+        "simpler integration into existing projects",
+        "cleaner repository structure for users",
+        "flexible installation methods",
+        "better separation of Claude-specific files",
+        "maintained FCM compliance at new level"
+      ],
+      "quality_metrics": {
+        "integration_simplicity": "significantly improved",
+        "user_repository_impact": "minimal",
+        "installation_flexibility": "multiple methods supported",
+        "fcm_compliance_maintained": true
+      },
+      "identity_preservation": {
+        "core_pattern": "sidecar:beside:supplemental:autonomous",
+        "preserved": true,
+        "rationale": "sidecar relationship maintained at repository level instead of container level"
+      }
     }
   ],
   
@@ -201,7 +241,7 @@
   
   "predicted_evolution": [
     {
-      "version": "0.4.0",
+      "version": "0.5.0",
       "timeline": "based on usage patterns",
       "likely_changes": [
         "machine learning from user interaction patterns",
@@ -216,7 +256,7 @@
       ]
     },
     {
-      "version": "0.5.0", 
+      "version": "0.6.0", 
       "timeline": "distributed usage phase",
       "likely_changes": [
         "distributed configuration management",
