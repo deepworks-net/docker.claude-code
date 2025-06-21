@@ -53,20 +53,24 @@ This implementation fully supports Anthropic's Max plan:
    docker-compose exec claude-code bash
    ```
 
-### Option 2: Pull from Docker Hub (Coming Soon)
+### Option 2: Zero-Config with Docker Hub Image (Recommended)
 
 ```bash
-# Create docker-compose.yml in your project root
+# Quick start - no files needed!
+docker run -it -v .:/home/coder/project deepworks/claude-code:latest
+
+# Or with docker-compose.yml in your project:
 version: '3.8'
 services:
   claude-code:
     image: deepworks/claude-code:latest
     volumes:
-      - .:/home/coder/project/repository:rw
-      - ./claude:/home/coder/claude:rw
+      - .:/home/coder/project:rw
+      # Optional: Add custom config by uncommenting:
+      # - ./claude/CLAUDE.md:/home/coder/claude/CLAUDE.md:ro
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-    working_dir: /home/coder/project/repository
+    working_dir: /home/coder/project
     tty: true
     stdin_open: true
 

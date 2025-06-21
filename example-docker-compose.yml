@@ -2,13 +2,13 @@
 # Copy this to your project root and customize as needed
 services:
   claude-code:
-    # Option 1: Build from downloaded source
-    build:
-      context: ./claude-docker  # Path to downloaded docker.claude-code folder
-      dockerfile: Dockerfile
+    # Use pre-built image (recommended for v0.4.1+)
+    image: deepworks/claude-code:latest
     
-    # Option 2: Use pre-built image (when available)
-    # image: deepworks/claude-code:latest
+    # Option 2: Build from source (if customizing Dockerfile)
+    # build:
+    #   context: ./claude-docker  # Path to downloaded docker.claude-code folder
+    #   dockerfile: Dockerfile
     
     volumes:
       # Mount your project (current directory) as the working repository

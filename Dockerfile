@@ -26,8 +26,23 @@ RUN mkdir -p /home/coder/.ssh \
     /home/coder/config \
     /home/coder/docs \
     /home/coder/project \
+    /home/coder/claude/config \
+    /home/coder/claude/models \
+    /home/coder/claude/validation \
     && chmod 700 /home/coder/.ssh \
     && chown -R coder:coder /home/coder /opt/context
+
+# Copy default Claude configuration into the image
+COPY --chown=coder:coder config/ /home/coder/claude/config/
+COPY --chown=coder:coder models/ /home/coder/claude/models/
+COPY --chown=coder:coder validation/ /home/coder/claude/validation/
+COPY --chown=coder:coder CLAUDE.md /home/coder/claude/CLAUDE.md
+
+# Create legacy compatibility symlinks
+RUN ln -s /home/coder/claude/CLAUDE.md /home/coder/CLAUDE.md && \
+    ln -s /home/coder/claude/config /home/coder/config && \
+    ln -s /home/coder/claude/models /home/coder/models && \
+    ln -s /home/coder/claude/validation /home/coder/validation
 
 # Set working directory
 WORKDIR /home/coder/project
