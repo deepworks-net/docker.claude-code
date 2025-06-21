@@ -4,18 +4,18 @@ echo "🚀 Starting Claude Code with FCM Enhancement..."
 
 # Validate FCM compliance before operation
 echo "🔍 Validating FCM compliance..."
-if command -v node >/dev/null 2>&1 && [ -f "/home/coder/validation/validate-fcm.js" ]; then
-    node /home/coder/validation/validate-fcm.js || {
+if command -v node >/dev/null 2>&1 && [ -f "/home/coder/claude/validation/validate-fcm.js" ]; then
+    node /home/coder/claude/validation/validate-fcm.js || {
         echo "❌ FCM validation failed. Configuration violates FCM principles."
-        echo "📚 See structural requirements in /home/coder/models/"
-        echo "⚙️  Check configuration in /home/coder/config/"
+        echo "📚 See structural requirements in /home/coder/claude/models/"
+        echo "⚙️  Check configuration in /home/coder/claude/config/"
         exit 1
     }
     echo "✅ FCM validation passed"
     
     # Track evolution startup (only if validation passed)
     echo "📊 Tracking evolution startup..."
-    [ -f "/home/coder/validation/track-evolution.js" ] && node /home/coder/validation/track-evolution.js startup 2>/dev/null || true
+    [ -f "/home/coder/claude/validation/track-evolution.js" ] && node /home/coder/claude/validation/track-evolution.js startup 2>/dev/null || true
 else
     echo "ℹ️  FCM validation skipped - tools not available"
 fi
@@ -23,13 +23,13 @@ fi
 # Create all symbolic links in a single loop
 echo "🔗 Setting up symbolic links..."
 for target in config models validation; do
-    ln -sf /home/coder/project/$target /home/coder/$target 2>/dev/null || true
-    ln -sf /home/coder/project/$target /opt/context/$target 2>/dev/null || true
+    ln -sf /home/coder/claude/$target /home/coder/$target 2>/dev/null || true
+    ln -sf /home/coder/claude/$target /opt/context/$target 2>/dev/null || true
 done
 
 # Only copy legacy config files if they don't exist (reduces I/O)
 for file in claude.default.config.md claude.config.model.json claude.config.fcm.json; do
-    [ ! -f "/home/coder/$file" ] && cp -f /home/coder/project/config/$file /home/coder/$file 2>/dev/null || true
+    [ ! -f "/home/coder/$file" ] && cp -f /home/coder/claude/config/$file /home/coder/$file 2>/dev/null || true
 done
 
 # Setup Max Plan information
@@ -49,8 +49,8 @@ fi
 
 # Check resonance alignment (optional, non-blocking)
 echo "🔄 Checking resonance alignment..."
-if [ -f "/home/coder/validation/check-resonance.js" ]; then
-    node /home/coder/validation/check-resonance.js 2>/dev/null || {
+if [ -f "/home/coder/claude/validation/check-resonance.js" ]; then
+    node /home/coder/claude/validation/check-resonance.js 2>/dev/null || {
         echo "⚠️  Resonance check completed with issues - see report for details"
     }
 fi
@@ -73,7 +73,7 @@ To get started:
 1. Run 'claude' to launch Claude Code
 2. If using Max Plan: You may need to run '/login' and use your Claude.ai credentials
 3. See MAX-PLAN.md for more information about Max Plan features
-4. See /home/coder/models/ for FCM formal definitions
+4. See /home/coder/claude/models/ for FCM formal definitions
 
 Repository: $(basename $(pwd))
 FCM Version: 0.3.1
@@ -84,10 +84,10 @@ cat /home/coder/claude-welcome.txt
 
 echo ""
 echo "📚 FCM Resources:"
-echo "   - Sidecar Pattern: /home/coder/models/fcm.sidecar.md"
-echo "   - Docker Bridge: /home/coder/models/fcm.docker-bridge.md"
-echo "   - Configuration: /home/coder/models/fcm.config.md"
-echo "   - Validation Tools: /home/coder/validation/"
+echo "   - Sidecar Pattern: /home/coder/claude/models/fcm.sidecar.md"
+echo "   - Docker Bridge: /home/coder/claude/models/fcm.docker-bridge.md"
+echo "   - Configuration: /home/coder/claude/models/fcm.config.md"
+echo "   - Validation Tools: /home/coder/claude/validation/"
 echo ""
 
 # Start the original command
